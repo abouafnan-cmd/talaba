@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام الحضور والغياب</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-user-check"></i>
+                    <h1>نظام الحضور والغياب</h1>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="#" class="nav-link active" data-tab="attendance"><i class="fas fa-clipboard-check"></i> تسجيل الحضور</a></li>
+                        <li><a href="#" class="nav-link" data-tab="students"><i class="fas fa-users"></i> إدارة الطلبة</a></li>
+                        <li><a href="#" class="nav-link" data-tab="subjects"><i class="fas fa-book"></i> المواد والأقسام</a></li>
+                        <li><a href="#" class="nav-link" data-tab="reports"><i class="fas fa-chart-bar"></i> التقارير</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <div class="container">
+            <!-- قسم تسجيل الحضور والغياب -->
+            <section id="attendance" class="tab-content active">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">تسجيل الحضور والغياب</h2>
+                    </div>
+                    <div class="form-group">
+                        <label for="section-select">اختر القسم:</label>
+                        <select id="section-select">
+                            <option value="">-- اختر القسم --</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="subject-select">اختر المادة:</label>
+                        <select id="subject-select">
+                            <option value="">-- اختر المادة --</option>
+                        </select>
+                    </div>
+                    
+                    <div id="students-list" style="display: none;">
+                        <h3>قائمة الطلاب</h3>
+                        <div class="table-responsive">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>اسم الطالب</th>
+                                        <th>الحالة</th>
+                                        <th>ملاحظات</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="attendance-table-body">
+                                    <!-- سيتم ملؤها بالبيانات -->
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="form-group" style="margin-top: 1rem;">
+                            <button class="btn btn-primary" id="save-attendance"><i class="fas fa-save"></i> حفظ الحضور</button>
+                            <button class="btn btn-success" id="export-pdf" style="display: none;"><i class="fas fa-file-pdf"></i> تصدير إلى PDF</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- قسم إدارة الطلبة -->
+            <section id="students" class="tab-content">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">إدارة الطلبة</h2>
+                        <button class="btn btn-primary" id="add-student-btn"><i class="fas fa-plus"></i> إضافة طالب</button>
+                    </div>
+                    
+                    <div class="tabs">
+                        <div class="tab active" data-subtab="students-list">قائمة الطلاب</div>
+                        <div class="tab" data-subtab="import-students">استيراد الطلاب</div>
+                    </div>
+                    
+                    <div class="tab-content active" id="students-list-content">
+                        <div class="table-responsive">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>الرقم</th>
+                                        <th>اسم الطالب</th>
+                                        <th>القسم</th>
+                                        <th>الإجراءات</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="students-table-body">
+                                    <!-- سيتم ملؤها بالبيانات -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <div class="tab-content" id="import-students-content">
+                        <div class="form-group">
+                            <label>استيراد قائمة الطلاب من ملف:</label>
+                            <input type="file" id="import-file" accept=".xlsx, .xls, .txt">
+                            <p style="margin-top: 0.5rem; color: #6c757d; font-size: 0.9rem;">يمكنك استيراد ملف إكسيل أو ملف نصي</p>
+                        </div>
+                        <button class="btn btn-primary" id="import-btn"><i class="fas fa-file-import"></i> استيراد</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- قسم المواد والأقسام -->
+            <section id="subjects" class="tab-content">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">إدارة المواد والأقسام</h2>
+                    </div>
+                    
+                    <div class="tabs">
+                        <div class="tab active" data-subtab="subjects-list">المواد الدراسية</div>
+                        <div class="tab" data-subtab="sections-list">الأقسام</div>
+                    </div>
+                    
+                    <div class="tab-content active" id="subjects-list-content">
+                        <div class="card-header">
+                            <h3 class="card-title">قائمة المواد الدراسية</h3>
+                            <button class="btn btn-primary" id="add-subject-btn"><i class="fas fa-plus"></i> إضافة مادة</button>
+                        </div>
+                        <div class="table-responsive">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>اسم المادة</th>
+                                        <th>القسم</th>
+                                        <th>الإجراءات</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="subjects-table-body">
+                                    <!-- سيتم ملؤها بالبيانات -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <div class="tab-content" id="sections-list-content">
+                        <div class="card-header">
+                            <h3 class="card-title">قائمة الأقسام</h3>
+                            <button class="btn btn-primary" id="add-section-btn"><i class="fas fa-plus"></i> إضافة قسم</button>
+                        </div>
+                        <div class="table-responsive">
+                            <table>
+                                <thead>
+                                    <tr>
+                                        <th>اسم القسم</th>
+                                        <th>عدد الطلاب</th>
+                                        <th>الإجراءات</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="sections-table-body">
+                                    <!-- سيتم ملؤها بالبيانات -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- قسم التقارير والإحصاءات -->
+            <section id="reports" class="tab-content">
+                <div class="card">
+                    <div class="card-header">
+                        <h2 class="card-title">التقارير والإحصاءات</h2>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="report-type">نوع التقرير:</label>
+                        <select id="report-type">
+                            <option value="general">إحصاءات عامة</option>
+                            <option value="subject">حسب المادة</option>
+                            <option value="student">حسب الطالب</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group" id="subject-select-report" style="display: none;">
+                        <label for="report-subject">اختر المادة:</label>
+                        <select id="report-subject">
+                            <option value="">-- اختر المادة --</option>
+                        </select>
+                    </div>
+                    
+                    <div class="stats-container" id="stats-container">
+                        <!-- سيتم ملؤها بالإحصائيات -->
+                    </div>
+                    
+                    <div class="table-responsive" style="margin-top: 2rem;">
+                        <table id="reports-table">
+                            <thead>
+                                <tr>
+                                    <th>التاريخ</th>
+                                    <th>المادة</th>
+                                    <th>القسم</th>
+                                    <th>نسبة الحضور</th>
+                                    <th>عدد الحاضرين</th>
+                                    <th>عدد الغائبين</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- سيتم ملؤها بالبيانات -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>نظام الحضور والغياب &copy; 2023</p>
+        </div>
+    </footer>
+
+    <!-- النماذج المنبثقة -->
+    <div id="student-modal" class="modal">
+        <div class="card modal-content">
+            <div class="card-header">
+                <h3 class="card-title" id="student-modal-title">إضافة طالب</h3>
+                <button class="btn btn-danger close-modal"><i class="fas fa-times"></i></button>
+            </div>
+            <form id="student-form">
+                <div class="form-group">
+                    <label for="student-name">اسم الطالب:</label>
+                    <input type="text" id="student-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="student-section">القسم:</label>
+                    <select id="student-section" required>
+                        <option value="">-- اختر القسم --</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">حفظ</button>
+                    <button type="button" class="btn btn-danger close-modal">إلغاء</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="subject-modal" class="modal">
+        <div class="card modal-content">
+            <div class="card-header">
+                <h3 class="card-title" id="subject-modal-title">إضافة مادة</h3>
+                <button class="btn btn-danger close-modal"><i class="fas fa-times"></i></button>
+            </div>
+            <form id="subject-form">
+                <div class="form-group">
+                    <label for="subject-name">اسم المادة:</label>
+                    <input type="text" id="subject-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="subject-section">القسم:</label>
+                    <select id="subject-section" required>
+                        <option value="">-- اختر القسم --</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">حفظ</button>
+                    <button type="button" class="btn btn-danger close-modal">إلغاء</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="section-modal" class="modal">
+        <div class="card modal-content">
+            <div class="card-header">
+                <h3 class="card-title" id="section-modal-title">إضافة قسم</h3>
+                <button class="btn btn-danger close-modal"><i class="fas fa-times"></i></button>
+            </div>
+            <form id="section-form">
+                <div class="form-group">
+                    <label for="section-name">اسم القسم:</label>
+                    <input type="text" id="section-name" required>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">حفظ</button>
+                    <button type="button" class="btn btn-danger close-modal">إلغاء</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- تحميل ملفات JavaScript -->
+    <script src="js/app.js"></script>
+    <script src="js/students.js"></script>
+    <script src="js/subjects.js"></script>
+    <script src="js/attendance.js"></script>
+    <script src="js/reports.js"></script>
+</body>
+</html>
