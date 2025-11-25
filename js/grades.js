@@ -29,6 +29,7 @@ async function loadStudentsForGrades() {
         document.getElementById('gradesStatsContainer').style.display = 'block';
         showMessage('تم تحميل قائمة الطلبة بنجاح', 'success');
     } catch (error) {
+        console.error('Error loading students:', error);
         showMessage('حدث خطأ في تحميل بيانات الطلبة', 'error');
     }
 }
@@ -88,9 +89,13 @@ function displayGradesTable() {
 // دالة لتحديث النقط والمعدل
 function updateGrades() {
     const index = this.dataset.index;
-    const exam1 = parseFloat(document.querySelector(`.exam1[data-index="${index}"]`).value) || 0;
-    const exam2 = parseFloat(document.querySelector(`.exam2[data-index="${index}"]`).value) || 0;
-    const activities = parseFloat(document.querySelector(`.activities[data-index="${index}"]`).value) || 0;
+    const exam1Input = document.querySelector(`.exam1[data-index="${index}"]`);
+    const exam2Input = document.querySelector(`.exam2[data-index="${index}"]`);
+    const activitiesInput = document.querySelector(`.activities[data-index="${index}"]`);
+    
+    const exam1 = parseFloat(exam1Input.value) || 0;
+    const exam2 = parseFloat(exam2Input.value) || 0;
+    const activities = parseFloat(activitiesInput.value) || 0;
     
     const average = calculateAverage(exam1, exam2, activities);
     const averageCell = document.querySelector(`.average-cell[data-index="${index}"]`);
@@ -143,9 +148,13 @@ function saveGrades() {
     
     // جمع البيانات من الجدول
     studentsGrades.forEach((student, index) => {
-        const exam1 = document.querySelector(`.exam1[data-index="${index}"]`).value;
-        const exam2 = document.querySelector(`.exam2[data-index="${index}"]`).value;
-        const activities = document.querySelector(`.activities[data-index="${index}"]`).value;
+        const exam1Input = document.querySelector(`.exam1[data-index="${index}"]`);
+        const exam2Input = document.querySelector(`.exam2[data-index="${index}"]`);
+        const activitiesInput = document.querySelector(`.activities[data-index="${index}"]`);
+        
+        const exam1 = exam1Input.value;
+        const exam2 = exam2Input.value;
+        const activities = activitiesInput.value;
         
         gradesData[currentClassGrades][student.fullName] = {
             exam1: exam1,
@@ -180,60 +189,67 @@ function updateGradesStats() {
     
     // جمع الإحصائيات
     studentsGrades.forEach((student, index) => {
-        const exam1 = parseFloat(document.querySelector(`.exam1[data-index="${index}"]`).value) || 0;
-        const exam2 = parseFloat(document.querySelector(`.exam2[data-index="${index}"]`).value) || 0;
-        const activities = parseFloat(document.querySelector(`.activities[data-index="${index}"]`).value) || 0;
+        const exam1Input = document.querySelector(`.exam1[data-index="${index}"]`);
+        const exam2Input = document.querySelector(`.exam2[data-index="${index}"]`);
+        const activitiesInput = document.querySelector(`.activities[data-index="${index}"]`);
+        
+        const exam1 = parseFloat(exam1Input.value) || 0;
+        const exam2 = parseFloat(exam2Input.value) || 0;
+        const activities = parseFloat(activitiesInput.value) || 0;
         
         if (exam1 > 0 || exam2 > 0 || activities > 0) {
             completedGrades++;
             const average = parseFloat(calculateAverage(exam1, exam2, activities));
-            sumAverages += average;
-            
-            if (average >= 16) excellentCount++;
-            else if (average >= 14) veryGoodCount++;
-            else if (average >= 12) goodCount++;
-            else if (average >= 10) acceptableCount++;
-            else weakCount++;
+            if (!isNaN(average)) {
+                sumAverages += average;
+                
+                if (average >= 16) excellentCount++;
+                else if (average >= 14) veryGoodCount++;
+                else if (average >= 12) goodCount++;
+                else if (average >= 10) acceptableCount++;
+                else weakCount++;
+            }
         }
     });
     
     const classAvg = completedGrades > 0 ? (sumAverages / completedGrades).toFixed(2) : 0;
+    const completionRate = Math.round((completedGrades / totalStudents) * 100);
     
     statsContent.innerHTML = `
         <div class="stats-grid">
-            <div class="stat-card" style="background-color: #3498db;">
+            <div class="stat-card" style="background: var(--gradient-primary);">
                 <h4>إجمالي الطلبة</h4>
                 <p>${totalStudents}</p>
             </div>
-            <div class="stat-card" style="background-color: #27ae60;">
+            <div class="stat-card" style="background: var(--gradient-success);">
                 <h4>تم تقييمهم</h4>
-                <p>${completedStudents} (${Math.round((completedGrades / totalStudents) * 100)}%)</p>
+                <p>${completedGrades} (${completionRate}%)</p>
             </div>
-            <div class="stat-card" style="background-color: #e74c3c;">
+            <div class="stat-card" style="background: var(--gradient-secondary);">
                 <h4>المعدل العام</h4>
                 <p>${classAvg}/20</p>
             </div>
         </div>
         
-        <h3 style="margin-top: 20px;">توزيع التقديرات</h3>
+        <h3 style="margin-top: 30px; color: var(--dark-color);">توزيع التقديرات</h3>
         <div class="stats-grid">
-            <div class="stat-card" style="background-color: #27ae60;">
+            <div class="stat-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
                 <h4>ممتاز</h4>
                 <p>${excellentCount}</p>
             </div>
-            <div class="stat-card" style="background-color: #2ecc71;">
+            <div class="stat-card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
                 <h4>جيد جداً</h4>
                 <p>${veryGoodCount}</p>
             </div>
-            <div class="stat-card" style="background-color: #f39c12;">
+            <div class="stat-card" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
                 <h4>جيد</h4>
                 <p>${goodCount}</p>
             </div>
-            <div class="stat-card" style="background-color: #e67e22;">
+            <div class="stat-card" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);">
                 <h4>مقبول</h4>
                 <p>${acceptableCount}</p>
             </div>
-            <div class="stat-card" style="background-color: #e74c3c;">
+            <div class="stat-card" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
                 <h4>ضعيف</h4>
                 <p>${weakCount}</p>
             </div>
