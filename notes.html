@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام متابعة الطلبة - الملاحظات</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">نظام متابعة الطلبة</div>
+                <nav>
+                    <ul>
+                        <li><a href="index.html">الرئيسية</a></li>
+                        <li><a href="attendance.html">الحضور والغياب</a></li>
+                        <li><a href="grades.html">النقط والعلامات</a></li>
+                        <li><a href="random-name.html">اختيار عشوائي</a></li>
+                        <li><a href="notes.html" class="active">الملاحظات</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+    
+    <main>
+        <div class="container">
+            <h1 class="page-title">الملاحظات الخاصة على الطلبة</h1>
+            
+            <div class="card">
+                <div class="form-group">
+                    <label for="classSelectNotes">اختر القسم:</label>
+                    <select id="classSelectNotes">
+                        <option value="">-- اختر القسم --</option>
+                        <option value="جذع مشترك علوم 5">جذع مشترك علوم 5</option>
+                        <option value="جذع مشترك علوم 6">جذع مشترك علوم 6</option>
+                        <option value="جذع مشترك علوم 7">جذع مشترك علوم 7</option>
+                        <option value="جذع مشترك علوم 8">جذع مشترك علوم 8</option>
+                        <option value="الأولى علوم 5">الأولى علوم 5</option>
+                        <option value="الأولى علوم 6">الأولى علوم 6</option>
+                        <option value="الأولى آداب 3">الأولى آداب 3</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="studentSelectNotes">اختر الطالب:</label>
+                    <select id="studentSelectNotes">
+                        <option value="">-- اختر الطالب --</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="noteContent">الملاحظة:</label>
+                    <textarea id="noteContent" rows="4" placeholder="اكتب ملاحظتك هنا..."></textarea>
+                </div>
+                
+                <button id="addNoteBtn" class="btn-success">إضافة الملاحظة</button>
+            </div>
+            
+            <div class="card" id="notesListContainer" style="display: none;">
+                <h2>الملاحظات المسجلة</h2>
+                <div id="notesList" class="notes-list">
+                    <!-- سيتم ملؤها بالملاحظات -->
+                </div>
+            </div>
+        </div>
+    </main>
+    
+    <footer>
+        <div class="container">
+            <p>نظام متابعة الطلبة - مادة اللغة العربية &copy; 2023</p>
+        </div>
+    </footer>
+    
+    <script src="js/main.js"></script>
+    <script src="js/notes.js"></script>
+</body>
+</html>

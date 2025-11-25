@@ -1,55 +1,296 @@
-/* تنسيقات إضافية للتقارير */
-.attendance-present {
-    color: var(--success);
-    font-weight: bold;
+/* التنسيقات الأساسية */
+:root {
+    --primary-color: #3498db;
+    --secondary-color: #2c3e50;
+    --accent-color: #e74c3c;
+    --light-color: #ecf0f1;
+    --success-color: #27ae60;
+    --warning-color: #f39c12;
+    --danger-color: #e74c3c;
 }
 
-.attendance-absent {
-    color: var(--danger);
-    font-weight: bold;
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.report-actions {
+body {
+    background-color: #f5f7fa;
+    color: #333;
+    line-height: 1.6;
+    direction: rtl;
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* تنسيق الهيدر */
+header {
+    background: linear-gradient(135deg, var(--secondary-color), var(--primary-color));
+    color: white;
+    padding: 1rem 0;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.header-content {
     display: flex;
-    gap: 1rem;
-    justify-content: center;
-    margin: 2rem 0;
-    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
 }
 
-.summary-cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 1.5rem;
-    margin: 2rem 0;
+.logo {
+    font-size: 1.8rem;
+    font-weight: bold;
 }
 
-.summary-card {
-    background: white;
-    padding: 1.5rem;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+/* تنسيق القائمة */
+nav ul {
+    display: flex;
+    list-style: none;
+}
+
+nav ul li {
+    margin-right: 20px;
+}
+
+nav ul li a {
+    color: white;
+    text-decoration: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+}
+
+nav ul li a:hover, nav ul li a.active {
+    background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* تنسيق المحتوى الرئيسي */
+main {
+    padding: 2rem 0;
+    min-height: calc(100vh - 200px);
+}
+
+.page-title {
     text-align: center;
+    margin-bottom: 2rem;
+    color: var(--secondary-color);
+    font-size: 2rem;
 }
 
-.summary-card.present {
-    border-top: 4px solid var(--success);
+.card {
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-bottom: 20px;
 }
 
-.summary-card.absent {
-    border-top: 4px solid var(--danger);
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-top: 20px;
 }
 
-.summary-card.total {
-    border-top: 4px solid var(--primary);
+.feature-card {
+    text-align: center;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    transition: transform 0.3s;
 }
 
-@media print {
-    .no-print {
-        display: none !important;
+.feature-card:hover {
+    transform: translateY(-5px);
+}
+
+.features-list {
+    margin-top: 10px;
+    padding-right: 20px;
+}
+
+.features-list li {
+    margin-bottom: 10px;
+}
+
+/* تنسيق الفورم */
+.form-group {
+    margin-bottom: 1rem;
+}
+
+label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+    color: var(--secondary-color);
+}
+
+select, input, textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+}
+
+button {
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #2980b9;
+}
+
+.btn-success {
+    background-color: var(--success-color);
+}
+
+.btn-success:hover {
+    background-color: #219653;
+}
+
+.btn-warning {
+    background-color: var(--warning-color);
+}
+
+.btn-warning:hover {
+    background-color: #e67e22;
+}
+
+.btn-danger {
+    background-color: var(--danger-color);
+}
+
+.btn-danger:hover {
+    background-color: #c0392b;
+}
+
+/* تنسيق الجدول */
+.table-container {
+    overflow-x: auto;
+    margin-top: 1rem;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+}
+
+th, td {
+    padding: 12px 15px;
+    text-align: right;
+    border-bottom: 1px solid #ddd;
+}
+
+th {
+    background-color: var(--secondary-color);
+    color: white;
+    position: sticky;
+    top: 0;
+}
+
+tr:hover {
+    background-color: #f9f9f9;
+}
+
+/* تنسيق حالة الحضور */
+.present {
+    color: var(--success-color);
+    font-weight: bold;
+}
+
+.absent {
+    color: var(--danger-color);
+    font-weight: bold;
+}
+
+.late {
+    color: var(--warning-color);
+    font-weight: bold;
+}
+
+/* تنسيق صفحة الاختيار العشوائي */
+.random-name-container {
+    text-align: center;
+    padding: 2rem;
+}
+
+.random-name-display {
+    font-size: 3rem;
+    margin: 2rem 0;
+    padding: 2rem;
+    background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    color: white;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+/* تنسيق صفحة الملاحظات */
+.notes-list {
+    margin-top: 1rem;
+}
+
+.note-item {
+    background: #f8f9fa;
+    padding: 15px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    border-right: 4px solid var(--primary-color);
+}
+
+.note-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 5px;
+}
+
+.note-date {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+/* تنسيق الفوتر */
+footer {
+    background-color: var(--secondary-color);
+    color: white;
+    text-align: center;
+    padding: 1rem 0;
+    margin-top: 2rem;
+}
+
+/* تنسيقات خاصة بالاستجابة */
+@media (max-width: 768px) {
+    .header-content {
+        flex-direction: column;
     }
     
-    .report-actions {
-        display: none !important;
+    nav ul {
+        margin-top: 1rem;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    nav ul li {
+        margin: 5px;
+    }
+    
+    .random-name-display {
+        font-size: 2rem;
+        padding: 1rem;
     }
 }
