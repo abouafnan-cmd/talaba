@@ -3,74 +3,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>نظام متابعة الطلبة - الرئيسية</title>
-    <link rel="stylesheet" href="css/style.css">
+    <title>بوابة المعهد العلمي</title>
+    
+    <link rel="icon" type="image/png" href="icons/192.png">
+    <link rel="apple-touch-icon" href="icons/192.png">
+    
+    <link rel="manifest" href="manifest.json">
+    <script src="app.js" defer></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Cairo', 'sans-serif'] },
+                    colors: { primary: '#1e3a8a', secondary: '#10b981' }
+                }
+            }
+        }
+    </script>
+    <style>
+        body { background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%); }
+        .tab-active { border-bottom: 3px solid #1e3a8a; color: #1e3a8a; font-weight: 700; }
+        .tab-inactive { color: #6b7280; }
+    </style>
 </head>
-<body>
-    <header>
-        <div class="container">
-            <div class="header-content">
-                <div class="logo">نظام متابعة الطلبة</div>
-                <nav>
-                    <ul>
-                        <li><a href="index.html" class="active">الرئيسية</a></li>
-                        <li><a href="attendance.html">الحضور والغياب</a></li>
-                        <li><a href="grades.html">النقط والعلامات</a></li>
-                        <li><a href="random-name.html">اختيار عشوائي</a></li>
-                        <li><a href="notes.html">الملاحظات</a></li>
-                    </ul>
-                </nav>
-            </div>
-        </div>
-    </header>
-    
-    <main>
-        <div class="container">
-            <h1 class="page-title">مرحباً بك في نظام متابعة الطلبة</h1>
+<body class="min-h-screen flex items-center justify-center p-4">
+
+    <div class="bg-white w-full max-w-md rounded-2xl shadow-2xl overflow-hidden">
+        <div class="bg-primary p-6 text-center">
+            <img src="icons/192.png" alt="شعار المعهد" class="w-16 h-16 rounded-full mx-auto mb-3 shadow-lg bg-white p-1 object-cover">
             
-            <div class="card">
-                <h2>نظرة عامة على النظام</h2>
-                <p>هذا النظام يسمح لك بمتابعة حضور وغياب الطلبة في مادة اللغة العربية، وكذلك وضع نقط المراقبة الأولى والمراقبة الثانية، وتقييم الأنشطة المندمجة.</p>
-                
-                <div class="features-grid">
-                    <div class="feature-card">
-                        <h3>الأقسام المتاحة</h3>
-                        <p>6 أقسام مختلفة</p>
-                    </div>
-                    <div class="feature-card">
-                        <h3>تسجيل الحضور</h3>
-                        <p>نظام متكامل للحضور والغياب</p>
-                    </div>
-                    <div class="feature-card">
-                        <h3>التقييم</h3>
-                        <p>احتساب المعدل تلقائياً</p>
-                    </div>
-                    <div class="feature-card">
-                        <h3>تقارير</h3>
-                        <p>تقارير مفصلة عن الطلبة</p>
-                    </div>
+            <h1 class="text-2xl font-bold text-white">المعهد العلمي</h1>
+            <p class="text-blue-200 text-sm mt-1">نظام إدارة التعليم والدراسة الأسبوعية</p>
+        </div>
+
+        <div class="flex border-b border-gray-200">
+            <button onclick="switchTab('student')" id="tab-student" class="flex-1 py-3 text-center text-sm tab-active transition-all duration-300">طالب</button>
+            <button onclick="switchTab('teacher')" id="tab-teacher" class="flex-1 py-3 text-center text-sm tab-inactive transition-all duration-300">أستاذ</button>
+            <button onclick="switchTab('admin')" id="tab-admin" class="flex-1 py-3 text-center text-sm tab-inactive transition-all duration-300">الإدارة</button>
+        </div>
+
+        <div class="p-8">
+            <form id="loginForm" onsubmit="handleLogin(event)">
+                <div class="mb-5">
+                    <label id="userLabel" class="block text-gray-700 text-sm font-semibold mb-2">الاسم الكامل (للطالب)</label>
+                    <input type="text" id="username" required class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all" placeholder="أدخل بياناتك هنا...">
                 </div>
-            </div>
-            
-            <div class="card">
-                <h2>ابدأ الآن</h2>
-                <p>اختر من القائمة أعلاه الوظيفة التي تريد استخدامها:</p>
-                <ul class="features-list">
-                    <li><strong>الحضور والغياب:</strong> لتسجيل حضور وغياب الطلبة</li>
-                    <li><strong>النقط والعلامات:</strong> لوضع وتقييم نتائج الطلبة</li>
-                    <li><strong>اختيار عشوائي:</strong> لاختيار اسم طالب عشوائياً من القسم</li>
-                    <li><strong>الملاحظات:</strong> لتسجيل ملاحظات خاصة عن الطلبة</li>
-                </ul>
-            </div>
+
+                <div id="passwordField" class="mb-6 hidden">
+                    <label class="block text-gray-700 text-sm font-semibold mb-2">الرقم السري</label>
+                    <input type="password" id="password" class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all" placeholder="••••••••">
+                </div>
+
+                <button type="submit" class="w-full bg-secondary hover:bg-green-600 text-white font-bold py-3 px-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
+                    تسجيل الدخول
+                </button>
+            </form>
         </div>
-    </main>
-    
-    <footer>
-        <div class="container">
-            <p>نظام متابعة الطلبة - مادة اللغة العربية &copy; 2023</p>
-        </div>
-    </footer>
-    
-    <script src="js/main.js"></script>
+    </div>
+
+    <script src="js/auth.js"></script>
 </body>
 </html>
