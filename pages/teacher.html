@@ -4,84 +4,64 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>بوابة الأستاذ | المعهد العلمي</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: { sans: ['Cairo', 'sans-serif'] },
-                    colors: { primary: '#1e3a8a', secondary: '#10b981', accent: '#f59e0b', danger: '#ef4444' }
-                }
-            }
-        }
-    </script>
+    <style>
+        .section-content { display: none; animation: fadeIn 0.3s ease-in-out; }
+        .section-active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
 </head>
 <body class="bg-gray-50 flex h-screen overflow-hidden text-gray-800">
-
     <aside class="w-64 bg-white border-l border-gray-200 flex flex-col hidden md:flex shadow-sm z-10">
         <div class="p-6 text-center border-b border-gray-100">
-            <div class="w-16 h-16 bg-blue-50 text-primary rounded-full flex items-center justify-center mx-auto mb-3 text-2xl">👨‍🏫</div>
-            <h2 class="text-xl font-bold text-gray-800">بوابة الأستاذ</h2>
+            <div class="text-4xl mb-2">👨‍🏫</div>
+            <h2 class="text-xl font-bold text-blue-900">بوابة الأستاذ</h2>
         </div>
-        <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
-            <a href="#" class="block px-4 py-3 bg-blue-50 text-primary font-bold rounded-lg transition-colors">🏠 الرئيسية</a>
-            <a href="#" onclick="window.openAttendanceModal()" class="block px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors cursor-pointer">✅ سجل الحضور والغياب</a>
-            <a href="#" class="block px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors">📚 مكتبة الدروس والملخصات</a>
+        <nav class="flex-1 p-4 space-y-2">
+            <button onclick="window.showSection('attendance')" class="w-full text-right px-4 py-3 bg-blue-50 text-blue-900 font-bold rounded-lg">✅ سجل الحضور</button>
+            <button onclick="window.showSection('assignments')" class="w-full text-right px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg">📝 التكليفات والتقييم</button>
         </nav>
         <div class="p-4 border-t border-gray-100">
-            <a href="../index.html" class="block w-full text-center px-4 py-2 text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition-colors font-semibold">تسجيل الخروج</a>
+            <a href="../index.html" class="block w-full text-center px-4 py-2 text-red-600 bg-red-50 hover:bg-red-100 rounded-lg font-semibold">تسجيل الخروج</a>
         </div>
     </aside>
 
-    <main class="flex-1 flex flex-col h-screen overflow-y-auto relative">
-        <div class="p-6 md:p-8 max-w-7xl mx-auto w-full">
-            <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
-                <div>
-                    <h1 class="text-2xl font-bold text-gray-800">مرحباً أستاذ،</h1>
-                    <p class="text-gray-500 mt-1">إليك ملخص نشاطك للفوج الدراسي (نهاية الأسبوع)</p>
-                </div>
+    <main class="flex-1 p-6 md:p-10 overflow-y-auto">
+        <div id="section-attendance" class="section-content section-active">
+            <h1 class="text-3xl font-bold text-gray-800 mb-8">سجل الغياب</h1>
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden p-6">
+                <input type="date" id="attendanceDate" class="mb-4 border border-gray-300 rounded-lg px-3 py-2 font-bold text-gray-700">
+                <table class="w-full text-right">
+                    <thead class="bg-gray-50 text-gray-600">
+                        <tr><th class="p-4">اسم الطالب</th><th class="p-4 text-center">حاضر / غائب</th></tr>
+                    </thead>
+                    <tbody id="attendanceTableBody"></tbody>
+                </table>
+                <button id="saveAttendanceBtn" class="mt-4 px-6 py-2 bg-green-500 hover:bg-green-600 text-white font-bold rounded-lg shadow">حفظ السجل</button>
             </div>
+        </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                <div class="bg-gradient-to-br from-green-500 to-green-600 p-6 rounded-2xl shadow-md text-white">
-                    <div class="flex justify-between items-center mb-4">
-                        <h3 class="text-lg font-bold">حضور اليوم</h3>
-                        <span class="bg-white/20 p-2 rounded-lg">✅</span>
-                    </div>
-                    <p id="studentCount" class="text-3xl font-bold mb-1">...</p>
-                    <p class="text-green-100 text-sm">إجمالي الطلبة المسجلين</p>
-                    <button onclick="window.openAttendanceModal()" class="mt-4 w-full bg-white text-green-600 font-bold py-2 rounded-lg hover:bg-gray-50 transition shadow-sm">أخذ الغياب الآن</button>
-                </div>
+        <div id="section-assignments" class="section-content">
+            <div class="flex justify-between items-center mb-8">
+                <h1 class="text-3xl font-bold text-gray-800">التكليفات والتقييم (على 20)</h1>
+                <button onclick="window.openModal('addAssignmentModal')" class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow">+ تكليف جديد</button>
             </div>
+            <div id="assignmentsList" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
         </div>
     </main>
 
-    <div id="attendanceModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
-        <div class="bg-white rounded-2xl w-full max-w-2xl p-6 shadow-2xl transform transition-all flex flex-col max-h-[90vh]">
-            <div class="flex justify-between items-center mb-5">
-                <h2 class="text-2xl font-bold text-primary">سجل غياب اليوم</h2>
-                <input type="date" id="attendanceDate" class="border border-gray-300 rounded-lg px-3 py-1 text-sm font-bold text-gray-700">
-            </div>
-            
-            <div class="overflow-y-auto flex-1 border border-gray-200 rounded-xl mb-4">
-                <table class="w-full text-right">
-                    <thead class="bg-gray-50 text-gray-600 text-sm sticky top-0">
-                        <tr>
-                            <th class="p-4 font-bold">اسم الطالب</th>
-                            <th class="p-4 font-bold text-center">حاضر</th>
-                            <th class="p-4 font-bold text-center">غائب</th>
-                        </tr>
-                    </thead>
-                    <tbody id="attendanceTableBody" class="text-gray-700">
-                        </tbody>
-                </table>
-            </div>
-
-            <div class="flex justify-end gap-3 mt-auto">
-                <button type="button" onclick="window.closeAttendanceModal()" class="px-5 py-2 bg-gray-200 text-gray-800 font-bold rounded-lg hover:bg-gray-300 transition-colors">إلغاء</button>
-                <button type="button" id="saveAttendanceBtn" class="px-5 py-2 bg-secondary text-white font-bold rounded-lg hover:bg-green-600 transition-colors">حفظ السجل</button>
-            </div>
+    <div id="addAssignmentModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+        <div class="bg-white rounded-2xl w-full max-w-md p-6 shadow-2xl">
+            <h2 class="text-2xl font-bold text-blue-900 mb-5">إضافة تكليف جديد</h2>
+            <form id="addAssignmentForm">
+                <div class="mb-4"><input type="text" id="assTitle" required class="w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-blue-500" placeholder="عنوان التكليف (مثال: إعراب أبيات)"></div>
+                <div class="mb-6"><textarea id="assDesc" required class="w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-blue-500" placeholder="اكتب المطلوب من الطالب هنا..."></textarea></div>
+                <div class="flex justify-end gap-3">
+                    <button type="button" onclick="window.closeModal('addAssignmentModal')" class="px-5 py-2 bg-gray-200 font-bold rounded-lg">إلغاء</button>
+                    <button type="submit" class="px-5 py-2 bg-blue-600 text-white font-bold rounded-lg">إرسال للطلبة</button>
+                </div>
+            </form>
         </div>
     </div>
 

@@ -4,172 +4,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>بوابة الطالب | المعهد العلمي</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    fontFamily: { sans: ['Cairo', 'sans-serif'] },
-                    colors: { primary: '#1e3a8a', secondary: '#10b981', warning: '#f59e0b', danger: '#ef4444' }
-                }
-            }
-        }
-    </script>
 </head>
 <body class="bg-gray-50 flex h-screen overflow-hidden text-gray-800">
-
     <aside class="w-64 bg-white border-l border-gray-200 flex flex-col hidden md:flex shadow-sm z-10">
         <div class="p-6 text-center border-b border-gray-100">
-            <div class="w-16 h-16 bg-green-50 text-secondary rounded-full flex items-center justify-center mx-auto mb-3 text-2xl">🎓</div>
-            <h2 class="text-xl font-bold text-gray-800">بوابة الطالب</h2>
-            <p class="text-gray-500 text-sm mt-1">الفوج الثاني</p>
+            <div class="text-4xl mb-2">🎓</div>
+            <h2 class="text-xl font-bold text-blue-900">بوابة الطالب</h2>
         </div>
-        <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
-            <a href="#" class="block px-4 py-3 bg-green-50 text-secondary font-bold rounded-lg transition-colors">🏠 لوحة المتابعة</a>
-            <a href="#" class="block px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors flex justify-between">
-                <span>📚 المكتبة والدروس</span>
-                <span class="bg-red-500 text-white text-xs px-2 py-1 rounded-full">2</span>
-            </a>
-            <a href="#" class="block px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors">📝 الاختبارات والواجبات</a>
-            <a href="#" class="block px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors">✅ سجل الغياب</a>
-            <a href="#" class="block px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors">🔔 كل الإشعارات</a>
+        <nav class="flex-1 p-4 space-y-2">
+            <button class="w-full text-right px-4 py-3 bg-blue-50 text-blue-900 font-bold rounded-lg">📝 التكليفات المطلوبة</button>
         </nav>
         <div class="p-4 border-t border-gray-100">
-            <a href="../index.html" class="block w-full text-center px-4 py-2 text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition-colors font-semibold">تسجيل الخروج</a>
+            <a href="../index.html" class="block w-full text-center px-4 py-2 text-red-600 bg-red-50 hover:bg-red-100 rounded-lg font-semibold">تسجيل الخروج</a>
         </div>
     </aside>
 
-    <main class="flex-1 flex flex-col h-screen overflow-y-auto relative">
-        
-        <header class="bg-white shadow-sm p-4 flex justify-between items-center md:hidden sticky top-0 z-20">
-            <h1 class="text-xl font-bold text-secondary">بوابة الطالب</h1>
-            <button class="text-gray-600 hover:text-secondary">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
-            </button>
-        </header>
-
-        <div class="p-6 md:p-8 max-w-7xl mx-auto w-full">
-            
-            <div class="mb-8">
-                <h1 class="text-2xl font-bold text-gray-800">مرحباً بك يا طارق،</h1>
-                <p class="text-gray-500 mt-1">إليك ملخص نشاطك الدراسي والمقررات المطلوبة لعطلة نهاية الأسبوع.</p>
+    <main class="flex-1 p-6 md:p-10 overflow-y-auto">
+        <h1 class="text-3xl font-bold text-gray-800 mb-8">التكليفات والواجبات</h1>
+        <div id="studentAssignmentsList" class="grid grid-cols-1 gap-6">
             </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between hover:shadow-md transition-shadow">
-                    <div>
-                        <p class="text-sm text-gray-500 mb-1">نسبة الحضور</p>
-                        <p class="text-2xl font-bold text-secondary">95%</p>
-                    </div>
-                    <div class="w-12 h-12 bg-green-50 text-green-500 rounded-full flex items-center justify-center text-xl">✅</div>
-                </div>
-
-                <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between hover:shadow-md transition-shadow">
-                    <div>
-                        <p class="text-sm text-gray-500 mb-1">أيام الغياب</p>
-                        <p class="text-2xl font-bold text-danger">1 <span class="text-sm font-normal text-gray-400">يوم</span></p>
-                    </div>
-                    <div class="w-12 h-12 bg-red-50 text-red-500 rounded-full flex items-center justify-center text-xl">⚠️</div>
-                </div>
-
-                <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between hover:shadow-md transition-shadow border-r-4 border-r-blue-500">
-                    <div>
-                        <p class="text-sm text-gray-500 mb-1">دروس جديدة</p>
-                        <p class="text-2xl font-bold text-primary">3</p>
-                    </div>
-                    <div class="w-12 h-12 bg-blue-50 text-blue-500 rounded-full flex items-center justify-center text-xl">📚</div>
-                </div>
-
-                <div class="bg-white p-5 rounded-2xl shadow-sm border border-gray-100 flex items-center justify-between hover:shadow-md transition-shadow border-r-4 border-r-warning">
-                    <div>
-                        <p class="text-sm text-gray-500 mb-1">واجبات بانتظارك</p>
-                        <p class="text-2xl font-bold text-warning">1</p>
-                    </div>
-                    <div class="w-12 h-12 bg-orange-50 text-orange-500 rounded-full flex items-center justify-center text-xl">📝</div>
-                </div>
-            </div>
-
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                
-                <div class="lg:col-span-1 space-y-6">
-                    <div class="bg-blue-50 rounded-2xl p-5 border border-blue-100">
-                        <div class="flex items-center gap-2 mb-4">
-                            <span class="text-xl">📢</span>
-                            <h3 class="font-bold text-primary">إعلانات الإدارة</h3>
-                        </div>
-                        <ul class="space-y-3">
-                            <li class="bg-white p-3 rounded-xl text-sm shadow-sm">
-                                <span class="block text-xs text-gray-400 mb-1">اليوم</span>
-                                <strong>ندوة المعهد:</strong> دعوة لحضور ندوة عامة حول آليات الدفاع عن الهوية الإسلامية في العصر الحديث، الأحد القادم بعد صلاة العصر.
-                            </li>
-                            <li class="bg-white p-3 rounded-xl text-sm shadow-sm">
-                                <span class="block text-xs text-gray-400 mb-1">الخميس الماضي</span>
-                                تذكير بموعد تسديد القسط الشهري.
-                            </li>
-                        </ul>
-                    </div>
-
-                    <div class="bg-orange-50 rounded-2xl p-5 border border-orange-100">
-                        <div class="flex items-center gap-2 mb-4">
-                            <span class="text-xl">👨‍🏫</span>
-                            <h3 class="font-bold text-orange-700">تنبيهات الأساتذة</h3>
-                        </div>
-                        <ul class="space-y-3">
-                            <li class="bg-white p-3 rounded-xl text-sm shadow-sm border-r-2 border-r-orange-400">
-                                <strong>مادة اللغة العربية:</strong> يرجى مراجعة القواعد المرفقة استعداداً للفرض القصير يوم السبت.
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="lg:col-span-2 space-y-6">
-                    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-                        <div class="flex justify-between items-center mb-5">
-                            <h2 class="text-lg font-bold text-gray-800">أحدث الملخصات والدروس</h2>
-                            <a href="#" class="text-secondary text-sm font-semibold hover:underline">المكتبة كاملة &larr;</a>
-                        </div>
-                        <div class="space-y-3">
-                            <div class="flex items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition">
-                                <div class="flex items-center gap-4">
-                                    <div class="bg-red-100 text-red-600 p-2 rounded-lg font-bold text-xs">PDF</div>
-                                    <div>
-                                        <h4 class="font-bold text-sm text-gray-800">بطاقة تقنية: مهارة كتابة السيرة الذاتية</h4>
-                                        <p class="text-xs text-gray-500">مادة التعبير والإنشاء</p>
-                                    </div>
-                                </div>
-                                <button class="text-primary hover:text-blue-700 font-bold text-sm bg-white px-3 py-1.5 rounded-lg shadow-sm border border-gray-200">تحميل</button>
-                            </div>
-                            <div class="flex items-center justify-between p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition">
-                                <div class="flex items-center gap-4">
-                                    <div class="bg-blue-100 text-blue-600 p-2 rounded-lg font-bold text-xs">Word</div>
-                                    <div>
-                                        <h4 class="font-bold text-sm text-gray-800">مقدمة في العروض: بحر الرجز</h4>
-                                        <p class="text-xs text-gray-500">مادة اللغة العربية</p>
-                                    </div>
-                                </div>
-                                <button class="text-primary hover:text-blue-700 font-bold text-sm bg-white px-3 py-1.5 rounded-lg shadow-sm border border-gray-200">تحميل</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
-                        <h2 class="text-lg font-bold text-gray-800 mb-5">الواجبات والاختبارات</h2>
-                        <div class="border border-dashed border-gray-300 rounded-xl p-5 text-center flex flex-col items-center justify-center">
-                            <div class="w-12 h-12 bg-orange-100 text-orange-500 rounded-full flex items-center justify-center text-xl mb-3">📝</div>
-                            <h4 class="font-bold text-gray-800 mb-1">واجب منزلي: السيرة الذاتية</h4>
-                            <p class="text-sm text-gray-500 mb-4">آخر أجل للتسليم: الجمعة القادمة قبل منتصف الليل.</p>
-                            <button class="bg-secondary hover:bg-green-600 text-white font-bold py-2 px-6 rounded-lg transition-colors shadow-sm">
-                                إرفاق الإجابة
-                            </button>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-
-        </div>
     </main>
 
+    <script type="module" src="../js/student.js"></script>
 </body>
 </html>
