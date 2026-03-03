@@ -11,7 +11,7 @@
             theme: {
                 extend: {
                     fontFamily: { sans: ['Cairo', 'sans-serif'] },
-                    colors: { primary: '#1e3a8a', secondary: '#10b981', accent: '#f59e0b' }
+                    colors: { primary: '#1e3a8a', secondary: '#10b981', accent: '#f59e0b', danger: '#ef4444' }
                 }
             }
         }
@@ -23,14 +23,11 @@
         <div class="p-6 text-center border-b border-gray-100">
             <div class="w-16 h-16 bg-blue-50 text-primary rounded-full flex items-center justify-center mx-auto mb-3 text-2xl">👨‍🏫</div>
             <h2 class="text-xl font-bold text-gray-800">بوابة الأستاذ</h2>
-            <p class="text-gray-500 text-sm mt-1">مادة اللغة العربية</p>
         </div>
         <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
             <a href="#" class="block px-4 py-3 bg-blue-50 text-primary font-bold rounded-lg transition-colors">🏠 الرئيسية</a>
-            <a href="#" class="block px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors">✅ سجل الحضور والغياب</a>
+            <a href="#" onclick="window.openAttendanceModal()" class="block px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors cursor-pointer">✅ سجل الحضور والغياب</a>
             <a href="#" class="block px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors">📚 مكتبة الدروس والملخصات</a>
-            <a href="#" class="block px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors">📝 التكليفات والتقييم (التنقيط)</a>
-            <a href="#" class="block px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors">📢 إرسال إشعار للفوج</a>
         </nav>
         <div class="p-4 border-t border-gray-100">
             <a href="../index.html" class="block w-full text-center px-4 py-2 text-red-600 bg-red-50 hover:bg-red-100 rounded-lg transition-colors font-semibold">تسجيل الخروج</a>
@@ -38,117 +35,56 @@
     </aside>
 
     <main class="flex-1 flex flex-col h-screen overflow-y-auto relative">
-        
-        <header class="bg-white shadow-sm p-4 flex justify-between items-center md:hidden sticky top-0 z-20">
-            <h1 class="text-xl font-bold text-primary">بوابة الأستاذ</h1>
-            <button class="text-gray-600 hover:text-primary">
-                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
-            </button>
-        </header>
-
         <div class="p-6 md:p-8 max-w-7xl mx-auto w-full">
-            
             <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
                 <div>
                     <h1 class="text-2xl font-bold text-gray-800">مرحباً أستاذ،</h1>
                     <p class="text-gray-500 mt-1">إليك ملخص نشاطك للفوج الدراسي (نهاية الأسبوع)</p>
                 </div>
-                <button class="bg-primary hover:bg-blue-700 text-white px-5 py-2.5 rounded-lg shadow transition-colors font-semibold flex items-center gap-2">
-                    <span>+</span> إرفاق درس جديد
-                </button>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
                 <div class="bg-gradient-to-br from-green-500 to-green-600 p-6 rounded-2xl shadow-md text-white">
                     <div class="flex justify-between items-center mb-4">
-                        <h3 class="text-lg font-bold">حضور اليوم (الأحد)</h3>
+                        <h3 class="text-lg font-bold">حضور اليوم</h3>
                         <span class="bg-white/20 p-2 rounded-lg">✅</span>
                     </div>
-                    <p class="text-3xl font-bold mb-1">28 / 30</p>
-                    <p class="text-green-100 text-sm">طالب حاضر</p>
-                    <button class="mt-4 w-full bg-white text-green-600 font-bold py-2 rounded-lg hover:bg-gray-50 transition">تسجيل غياب اليوم</button>
-                </div>
-
-                <div class="bg-gradient-to-br from-blue-600 to-primary p-6 rounded-2xl shadow-md text-white">
-                    <div class="flex justify-between items-center mb-4">
-                        <h3 class="text-lg font-bold">إنجازات قيد التنقيط</h3>
-                        <span class="bg-white/20 p-2 rounded-lg">📝</span>
-                    </div>
-                    <p class="text-3xl font-bold mb-1">12</p>
-                    <p class="text-blue-100 text-sm">إجابة تنتظر التقييم</p>
-                    <button class="mt-4 w-full bg-white text-primary font-bold py-2 rounded-lg hover:bg-gray-50 transition">مراجعة الإجابات</button>
-                </div>
-
-                <div class="bg-gradient-to-br from-orange-400 to-orange-500 p-6 rounded-2xl shadow-md text-white">
-                    <div class="flex justify-between items-center mb-4">
-                        <h3 class="text-lg font-bold">إشعار سريع للفوج</h3>
-                        <span class="bg-white/20 p-2 rounded-lg">📢</span>
-                    </div>
-                    <p class="text-sm text-orange-50 mb-3">هل تريد تنبيه الطلبة باختبار أو إحضار مادة معينة للدرس القادم؟</p>
-                    <button class="mt-2 w-full bg-white text-orange-500 font-bold py-2 rounded-lg hover:bg-gray-50 transition">كتابة إشعار</button>
+                    <p id="studentCount" class="text-3xl font-bold mb-1">...</p>
+                    <p class="text-green-100 text-sm">إجمالي الطلبة المسجلين</p>
+                    <button onclick="window.openAttendanceModal()" class="mt-4 w-full bg-white text-green-600 font-bold py-2 rounded-lg hover:bg-gray-50 transition shadow-sm">أخذ الغياب الآن</button>
                 </div>
             </div>
-
-            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
-                <div class="p-6 border-b border-gray-100 flex justify-between items-center bg-gray-50/50">
-                    <h2 class="text-lg font-bold text-gray-800">الملخصات والدروس المرفوعة مؤخراً</h2>
-                    <a href="#" class="text-primary text-sm font-semibold hover:underline">عرض الكل</a>
-                </div>
-                <div class="p-0 overflow-x-auto">
-                    <table class="w-full text-right">
-                        <thead class="text-gray-500 text-sm border-b border-gray-100">
-                            <tr>
-                                <th class="p-4 font-semibold">عنوان الملف / الدرس</th>
-                                <th class="p-4 font-semibold">النوع</th>
-                                <th class="p-4 font-semibold">تاريخ الرفع</th>
-                                <th class="p-4 font-semibold">عدد التحميلات</th>
-                                <th class="p-4 font-semibold text-center">إجراء</th>
-                            </tr>
-                        </thead>
-                        <tbody class="text-gray-700">
-                            <tr class="border-b border-gray-50 hover:bg-gray-50 transition-colors">
-                                <td class="p-4 font-semibold text-gray-800 flex items-center gap-3">
-                                    <span class="text-red-500">📄</span> 
-                                    بطاقة تقنية: مهارة كتابة السيرة الذاتية والغيرية
-                                </td>
-                                <td class="p-4"><span class="px-2 py-1 bg-red-50 text-red-600 text-xs font-bold rounded-md">PDF</span></td>
-                                <td class="p-4 text-sm text-gray-500">الأحد الماضي</td>
-                                <td class="p-4 text-sm text-center font-bold">25</td>
-                                <td class="p-4 text-center">
-                                    <button class="text-gray-400 hover:text-red-500 transition-colors" title="حذف">🗑️</button>
-                                </td>
-                            </tr>
-                            <tr class="border-b border-gray-50 hover:bg-gray-50 transition-colors">
-                                <td class="p-4 font-semibold text-gray-800 flex items-center gap-3">
-                                    <span class="text-blue-500">📘</span> 
-                                    مقال: الدفاع عن الهوية الإسلامية - قراءة تحليلية
-                                </td>
-                                <td class="p-4"><span class="px-2 py-1 bg-blue-50 text-blue-600 text-xs font-bold rounded-md">Word</span></td>
-                                <td class="p-4 text-sm text-gray-500">السبت الماضي</td>
-                                <td class="p-4 text-sm text-center font-bold">18</td>
-                                <td class="p-4 text-center">
-                                    <button class="text-gray-400 hover:text-red-500 transition-colors" title="حذف">🗑️</button>
-                                </td>
-                            </tr>
-                            <tr class="hover:bg-gray-50 transition-colors">
-                                <td class="p-4 font-semibold text-gray-800 flex items-center gap-3">
-                                    <span class="text-green-500">📝</span> 
-                                    تكليف: نظم أبيات لترسيخ المفاهيم المكتسبة
-                                </td>
-                                <td class="p-4"><span class="px-2 py-1 bg-green-50 text-green-600 text-xs font-bold rounded-md">واجب</span></td>
-                                <td class="p-4 text-sm text-gray-500">منذ أسبوعين</td>
-                                <td class="p-4 text-sm text-center font-bold">30</td>
-                                <td class="p-4 text-center">
-                                    <button class="text-gray-400 hover:text-red-500 transition-colors" title="حذف">🗑️</button>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
         </div>
     </main>
 
+    <div id="attendanceModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+        <div class="bg-white rounded-2xl w-full max-w-2xl p-6 shadow-2xl transform transition-all flex flex-col max-h-[90vh]">
+            <div class="flex justify-between items-center mb-5">
+                <h2 class="text-2xl font-bold text-primary">سجل غياب اليوم</h2>
+                <input type="date" id="attendanceDate" class="border border-gray-300 rounded-lg px-3 py-1 text-sm font-bold text-gray-700">
+            </div>
+            
+            <div class="overflow-y-auto flex-1 border border-gray-200 rounded-xl mb-4">
+                <table class="w-full text-right">
+                    <thead class="bg-gray-50 text-gray-600 text-sm sticky top-0">
+                        <tr>
+                            <th class="p-4 font-bold">اسم الطالب</th>
+                            <th class="p-4 font-bold text-center">حاضر</th>
+                            <th class="p-4 font-bold text-center">غائب</th>
+                        </tr>
+                    </thead>
+                    <tbody id="attendanceTableBody" class="text-gray-700">
+                        </tbody>
+                </table>
+            </div>
+
+            <div class="flex justify-end gap-3 mt-auto">
+                <button type="button" onclick="window.closeAttendanceModal()" class="px-5 py-2 bg-gray-200 text-gray-800 font-bold rounded-lg hover:bg-gray-300 transition-colors">إلغاء</button>
+                <button type="button" id="saveAttendanceBtn" class="px-5 py-2 bg-secondary text-white font-bold rounded-lg hover:bg-green-600 transition-colors">حفظ السجل</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="../js/teacher.js"></script>
 </body>
 </html>
