@@ -1,3 +1,7 @@
+if(userName) { 
+    document.getElementById('studentNameDisplay').innerText = `${userName}`; 
+    if(document.getElementById('mobileStudentName')) document.getElementById('mobileStudentName').innerText = `بوابة: ${userName}`;
+}
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
 import { getFirestore, collection, addDoc, getDocs, query, orderBy, where, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
