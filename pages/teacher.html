@@ -18,105 +18,81 @@
     <aside class="w-64 bg-white border-l border-gray-200 flex flex-col hidden md:flex shadow-sm z-10">
         <div class="p-6 text-center border-b border-gray-100">
             <div class="text-4xl mb-2">👨‍🏫</div>
-            <h2 class="text-xl font-bold text-blue-900">بوابة الأستاذ</h2>
+            <h2 class="text-xl font-bold text-blue-900" id="teacherNameDisplay">بوابة الأستاذ</h2>
+            <button onclick="window.openModal('changePassModal')" class="mt-2 text-xs bg-gray-200 hover:bg-gray-300 text-gray-700 px-3 py-1 rounded-full transition-colors">🔑 تغيير كلمة المرور</button>
         </div>
         <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
             <button onclick="window.showSection('attendance')" class="w-full text-right px-4 py-3 bg-blue-50 text-blue-900 font-bold rounded-lg transition-colors">✅ سجل الحضور</button>
             <button onclick="window.showSection('assignments')" class="w-full text-right px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors">📝 التكليفات العادية</button>
-            <button onclick="window.showSection('quizzes')" class="w-full text-right px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors text-purple-700 font-bold">⏱️ اختبارات رقمية</button>
+            <button onclick="window.showSection('quizzes')" class="w-full text-right px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors text-purple-700 font-bold">⏱️ الاختبارات الرقمية</button>
             <button onclick="window.showSection('documents')" class="w-full text-right px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg transition-colors text-orange-600 font-bold">📁 وثائق وجذاذات مساعدة</button>
         </nav>
         <div class="p-4 border-t border-gray-100">
-            <a href="../index.html" class="block w-full text-center px-4 py-2 text-red-600 bg-red-50 hover:bg-red-100 rounded-lg font-semibold">تسجيل الخروج</a>
+            <button onclick="window.logout()" class="block w-full text-center px-4 py-2 text-red-600 bg-red-50 hover:bg-red-100 rounded-lg font-semibold">تسجيل الخروج</button>
         </div>
     </aside>
 
     <main class="flex-1 p-6 md:p-10 overflow-y-auto">
-        
         <div id="section-attendance" class="section-content section-active">
             <h1 class="text-3xl font-bold text-gray-800 mb-8">سجل الغياب</h1>
-            <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden p-6">
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
                 <input type="date" id="attendanceDate" class="mb-4 border border-gray-300 rounded-lg px-3 py-2 font-bold text-gray-700">
-                <table class="w-full text-right">
-                    <thead class="bg-gray-50 text-gray-600"><tr><th class="p-4">اسم الطالب</th><th class="p-4 text-center">حاضر / غائب</th></tr></thead>
-                    <tbody id="attendanceTableBody"></tbody>
-                </table>
-                <button id="saveAttendanceBtn" class="mt-4 px-6 py-2 bg-green-500 hover:bg-green-600 text-white font-bold rounded-lg shadow">حفظ السجل</button>
+                <table class="w-full text-right"><thead class="bg-gray-50 text-gray-600"><tr><th class="p-4">اسم الطالب</th><th class="p-4 text-center">حاضر / غائب</th></tr></thead><tbody id="attendanceTableBody"></tbody></table>
+                <button id="saveAttendanceBtn" class="mt-4 px-6 py-2 bg-green-500 text-white font-bold rounded-lg shadow">حفظ السجل</button>
             </div>
         </div>
 
         <div id="section-assignments" class="section-content">
-            <div class="flex justify-between items-center mb-8">
-                <h1 class="text-3xl font-bold text-gray-800">التكليفات والتقييم</h1>
-                <button onclick="window.openModal('addAssignmentModal')" class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow">+ تكليف جديد</button>
-            </div>
+            <div class="flex justify-between items-center mb-8"><h1 class="text-3xl font-bold text-gray-800">التكليفات والتقييم</h1><button onclick="window.openModal('addAssignmentModal')" class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow">+ تكليف جديد</button></div>
             <div id="assignmentsList" class="grid grid-cols-1 gap-4"></div>
         </div>
 
         <div id="section-quizzes" class="section-content">
-            <div class="flex justify-between items-center mb-8">
-                <h1 class="text-3xl font-bold text-gray-800">الاختبارات الرقمية</h1>
-                <button onclick="window.openModal('addQuizModal')" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg shadow">+ إنشاء اختبار جديد</button>
-            </div>
-            <div id="quizzesList" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                </div>
+            <div class="flex justify-between items-center mb-8"><h1 class="text-3xl font-bold text-gray-800">الاختبارات الرقمية</h1><button onclick="window.openModal('addQuizModal')" class="bg-purple-600 text-white px-4 py-2 rounded-lg shadow">+ إنشاء اختبار جديد</button></div>
+            <div id="quizzesList" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
         </div>
 
         <div id="section-documents" class="section-content">
-            <div class="flex justify-between items-center mb-8">
-                <h1 class="text-3xl font-bold text-gray-800">وثائق وجذاذات مساعدة</h1>
-                <button onclick="window.openModal('addDocumentModal')" class="bg-orange-500 hover:bg-orange-600 text-white px-4 py-2 rounded-lg shadow">+ رفع وثيقة جديدة</button>
-            </div>
-            <div id="documentsList" class="grid grid-cols-1 gap-4">
-                </div>
+            <div class="flex justify-between items-center mb-8"><h1 class="text-3xl font-bold text-gray-800">وثائق وجذاذات مساعدة</h1><button onclick="window.openModal('addDocumentModal')" class="bg-orange-500 text-white px-4 py-2 rounded-lg shadow">+ رفع وثيقة جديدة</button></div>
+            <div id="documentsList" class="grid grid-cols-1 gap-4"></div>
         </div>
-
     </main>
 
-    <div id="addAssignmentModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
-        <div class="bg-white rounded-2xl w-full max-w-md p-6 shadow-2xl">
-            <h2 class="text-2xl font-bold text-blue-900 mb-5">إضافة تكليف</h2>
-            <form id="addAssignmentForm">
-                <div class="mb-4"><input type="text" id="assTitle" required class="w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-blue-500" placeholder="عنوان التكليف"></div>
-                <div class="mb-6"><textarea id="assDesc" required class="w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-blue-500" placeholder="المطلوب من الطالب..."></textarea></div>
-                <div class="flex justify-end gap-3"><button type="button" onclick="window.closeModal('addAssignmentModal')" class="px-5 py-2 bg-gray-200 font-bold rounded-lg">إلغاء</button><button type="submit" class="px-5 py-2 bg-blue-600 text-white font-bold rounded-lg">إرسال</button></div>
+    <div id="changePassModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+        <div class="bg-white rounded-2xl w-full max-w-sm p-6 shadow-2xl">
+            <h2 class="text-2xl font-bold text-gray-800 mb-5">تغيير كلمة المرور</h2>
+            <form id="changePassForm">
+                <input type="password" id="newPass" required class="w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-blue-500 mb-6" placeholder="كلمة المرور الجديدة" dir="ltr">
+                <div class="flex justify-end gap-3">
+                    <button type="button" onclick="window.closeModal('changePassModal')" class="px-5 py-2 bg-gray-200 font-bold rounded-lg">إلغاء</button>
+                    <button type="submit" class="px-5 py-2 bg-blue-600 text-white font-bold rounded-lg">حفظ التغيير</button>
+                </div>
             </form>
         </div>
     </div>
 
-    <div id="addDocumentModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
-        <div class="bg-white rounded-2xl w-full max-w-md p-6 shadow-2xl">
-            <h2 class="text-2xl font-bold text-orange-600 mb-5">مشاركة وثيقة أو جذاذة</h2>
-            <form id="addDocumentForm">
-                <div class="mb-4"><input type="text" id="docTitle" required class="w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-orange-500" placeholder="عنوان الوثيقة (مثال: جذاذة باب المبتدأ والخبر)"></div>
-                <div class="mb-4"><textarea id="docDesc" class="w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-orange-500" placeholder="وصف قصير للوثيقة..."></textarea></div>
-                <div class="mb-6"><input type="url" id="docLink" required class="w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-orange-500" placeholder="رابط الملف (Google Drive أو غيره)" dir="ltr"></div>
-                <div class="flex justify-end gap-3"><button type="button" onclick="window.closeModal('addDocumentModal')" class="px-5 py-2 bg-gray-200 font-bold rounded-lg">إلغاء</button><button type="submit" class="px-5 py-2 bg-orange-500 text-white font-bold rounded-lg">مشاركة الوثيقة</button></div>
-            </form>
+    <div id="quizResultsModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
+        <div class="bg-white rounded-2xl w-full max-w-2xl p-6 shadow-2xl max-h-[90vh] flex flex-col">
+            <h2 class="text-2xl font-bold text-purple-700 mb-5" id="resultsModalTitle">نتائج الاختبار</h2>
+            <div class="overflow-y-auto flex-1">
+                <table class="w-full text-right border">
+                    <thead class="bg-purple-50 text-purple-900"><tr><th class="p-3">اسم الطالب</th><th class="p-3">النقطة</th><th class="p-3">التاريخ</th></tr></thead>
+                    <tbody id="quizResultsBody"></tbody>
+                </table>
+            </div>
+            <div class="mt-4 text-left"><button onclick="window.closeModal('quizResultsModal')" class="px-5 py-2 bg-gray-200 font-bold rounded-lg">إغلاق</button></div>
         </div>
     </div>
 
+    <div id="addAssignmentModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50"><div class="bg-white rounded-2xl w-full max-w-md p-6"><form id="addAssignmentForm"><input type="text" id="assTitle" required class="w-full px-4 py-2 border rounded-lg mb-4" placeholder="عنوان التكليف"><textarea id="assDesc" required class="w-full px-4 py-2 border rounded-lg mb-6" placeholder="المطلوب من الطالب..."></textarea><div class="flex justify-end gap-3"><button type="button" onclick="window.closeModal('addAssignmentModal')" class="px-5 py-2 bg-gray-200 rounded-lg">إلغاء</button><button type="submit" class="px-5 py-2 bg-blue-600 text-white rounded-lg">إرسال</button></div></form></div></div>
+    <div id="addDocumentModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50"><div class="bg-white rounded-2xl w-full max-w-md p-6"><form id="addDocumentForm"><input type="text" id="docTitle" required class="w-full px-4 py-2 border rounded-lg mb-4" placeholder="عنوان الوثيقة"><textarea id="docDesc" class="w-full px-4 py-2 border rounded-lg mb-4" placeholder="وصف قصير..."></textarea><input type="url" id="docLink" required class="w-full px-4 py-2 border rounded-lg mb-6" placeholder="رابط الملف" dir="ltr"><div class="flex justify-end gap-3"><button type="button" onclick="window.closeModal('addDocumentModal')" class="px-5 py-2 bg-gray-200 rounded-lg">إلغاء</button><button type="submit" class="px-5 py-2 bg-orange-500 text-white rounded-lg">مشاركة</button></div></form></div></div>
+    
     <div id="addQuizModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
         <div class="bg-white rounded-2xl w-full max-w-3xl p-6 shadow-2xl max-h-[95vh] flex flex-col">
             <h2 class="text-2xl font-bold text-purple-700 mb-4">بناء اختبار رقمي</h2>
-            <div class="mb-4 flex gap-4">
-                <input type="text" id="quizTitle" required class="flex-1 px-4 py-2 rounded-lg border focus:ring-2 focus:ring-purple-500" placeholder="عنوان الاختبار (مثال: تقويم سورة البقرة)">
-                <select id="quizCount" class="px-4 py-2 rounded-lg border focus:ring-2 focus:ring-purple-500 font-bold text-purple-700" onchange="window.generateQuizForms()">
-                    <option value="0">اختر عدد الأسئلة</option>
-                    <option value="5">5 أسئلة (5 نقط)</option>
-                    <option value="10">10 أسئلة (10 نقط)</option>
-                    <option value="20">20 سؤال (20 نقطة)</option>
-                </select>
-            </div>
-            
-            <form id="addQuizForm" class="overflow-y-auto flex-1 pr-2 space-y-4">
-                <div id="questionsContainer" class="text-center text-gray-500 py-10">الرجاء اختيار عدد الأسئلة من القائمة العلوية للبدء في كتابة الاختبار.</div>
-            </form>
-
-            <div class="flex justify-end gap-3 mt-4 pt-4 border-t">
-                <button type="button" onclick="window.closeModal('addQuizModal')" class="px-5 py-2 bg-gray-200 font-bold rounded-lg">إلغاء</button>
-                <button type="button" onclick="window.saveQuiz()" id="saveQuizBtn" class="px-5 py-2 bg-purple-600 text-white font-bold rounded-lg hidden">نشر الاختبار للطلبة</button>
-            </div>
+            <div class="mb-4 flex gap-4"><input type="text" id="quizTitle" required class="flex-1 px-4 py-2 border rounded-lg" placeholder="عنوان الاختبار"><select id="quizCount" class="px-4 py-2 border rounded-lg text-purple-700 font-bold" onchange="window.generateQuizForms()"><option value="0">اختر عدد الأسئلة</option><option value="5">5 أسئلة (5 نقط)</option><option value="10">10 أسئلة (10 نقط)</option><option value="20">20 سؤال (20 نقطة)</option></select></div>
+            <form id="addQuizForm" class="overflow-y-auto flex-1 pr-2 space-y-4"><div id="questionsContainer" class="text-center text-gray-500 py-10">الرجاء اختيار عدد الأسئلة...</div></form>
+            <div class="flex justify-end gap-3 mt-4 pt-4 border-t"><button type="button" onclick="window.closeModal('addQuizModal')" class="px-5 py-2 bg-gray-200 rounded-lg">إلغاء</button><button type="button" onclick="window.saveQuiz()" id="saveQuizBtn" class="px-5 py-2 bg-purple-600 text-white rounded-lg hidden">نشر الاختبار</button></div>
         </div>
     </div>
 

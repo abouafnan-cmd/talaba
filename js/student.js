@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
-import { getFirestore, collection, addDoc, getDocs, query, orderBy, where, doc, getDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
+import { getFirestore, collection, addDoc, getDocs, query, orderBy, where, doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
 const app = initializeApp({
     apiKey: "AIzaSyDpawG59DxmrdHOxmglW7Ez3HcefvO5b6E",
@@ -11,213 +11,97 @@ const app = initializeApp({
 });
 const db = getFirestore(app);
 
-// إدارة التنقل
+// التحقق من هوية الطالب
+const userName = localStorage.getItem('userName');
+const userId = localStorage.getItem('userId');
+if(userName) { document.getElementById('studentNameDisplay').innerText = `${userName}`; }
+
+window.logout = () => { localStorage.clear(); window.location.href = '../index.html'; };
+
 window.showSection = (id) => {
     document.querySelectorAll('.section-content').forEach(el => el.classList.remove('section-active'));
     document.getElementById(`section-${id}`).classList.add('section-active');
 };
+window.openModal = (id) => document.getElementById(id).classList.remove('hidden');
+window.closeModal = (id) => { document.getElementById(id).classList.add('hidden'); };
 
-// ================= 1. الإخبارات والمواعيد =================
-async function loadAnnouncements() {
-    const list = document.getElementById('announcementsList');
+// 🔑 تغيير كلمة المرور للطالب
+document.getElementById('changePassForm').addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const newPass = document.getElementById('newPass').value;
+    if(!userId) return alert('خطأ في التعرف على المستخدم!');
     try {
-        // نجلب الإعلانات الموجهة للجميع أو للطلبة
-        const q1 = query(collection(db, "announcements"), where("targetMode", "in", ["all", "students"]));
-        const snapshot = await getDocs(q1);
-        list.innerHTML = '';
-        snapshot.forEach(doc => {
-            const ann = doc.data();
-            const icon = ann.type === 'موعد' ? '🗓️' : '📢';
-            const dateStr = ann.type === 'موعد' ? `<p class="text-red-600 font-bold text-sm mb-2">تاريخ الموعد: ${ann.date.replace('T', ' ')}</p>` : '';
-            list.innerHTML += `
-                <div class="bg-white p-5 rounded-xl border-l-4 ${ann.type === 'موعد' ? 'border-red-500' : 'border-yellow-500'} shadow-sm">
-                    <h3 class="font-bold text-gray-800 mb-2">${icon} ${ann.type}</h3>
-                    ${dateStr}
-                    <p class="text-gray-700 whitespace-pre-line text-sm">${ann.content}</p>
-                </div>`;
-        });
-        if(snapshot.empty) list.innerHTML = '<p class="text-gray-500">لا توجد إخبارات حالياً.</p>';
-    } catch(e) { console.error(e); }
-}
+        await updateDoc(doc(db, "users", userId), { password: newPass });
+        alert('تم تغيير كلمة المرور بنجاح!');
+        window.closeModal('changePassModal');
+        document.getElementById('changePassForm').reset();
+    } catch(err) { alert('حدث خطأ أثناء التحديث.'); console.error(err); }
+});
 
-// ================= 2. الوثائق والجذاذات =================
-async function loadDocuments() {
-    const list = document.getElementById('documentsList');
-    try {
-        const snapshot = await getDocs(query(collection(db, "documents"), orderBy("timestamp", "desc")));
-        list.innerHTML = '';
-        snapshot.forEach(doc => {
-            const d = doc.data();
-            list.innerHTML += `
-                <div class="bg-white p-5 rounded-xl border-r-4 border-orange-500 shadow-sm flex flex-col justify-between">
-                    <div>
-                        <h3 class="text-lg font-bold text-gray-800 mb-1">📁 ${d.title}</h3>
-                        <p class="text-sm text-gray-500 mb-4">${d.description}</p>
-                    </div>
-                    <a href="${d.link}" target="_blank" class="text-center px-4 py-2 bg-orange-100 text-orange-700 font-bold rounded-lg hover:bg-orange-200">تحميل / عرض الوثيقة</a>
-                </div>`;
-        });
-        if(snapshot.empty) list.innerHTML = '<p class="text-gray-500">لا توجد وثائق مرفوعة بعد.</p>';
-    } catch(e) { console.error(e); }
-}
+// تحميل المحتويات العادية
+async function loadAnnouncements() { const list = document.getElementById('announcementsList'); const q1 = query(collection(db, "announcements"), where("targetMode", "in", ["all", "students"])); const snapshot = await getDocs(q1); list.innerHTML = ''; snapshot.forEach(doc => { const ann = doc.data(); list.innerHTML += `<div class="bg-white p-5 rounded-xl border-l-4 ${ann.type === 'موعد' ? 'border-red-500' : 'border-yellow-500'} shadow-sm"><h3 class="font-bold text-gray-800 mb-2">${ann.type}</h3><p class="text-gray-700 whitespace-pre-line text-sm">${ann.content}</p></div>`; }); }
+async function loadDocuments() { const list = document.getElementById('documentsList'); const snapshot = await getDocs(query(collection(db, "documents"), orderBy("timestamp", "desc"))); list.innerHTML = ''; snapshot.forEach(doc => { const d = doc.data(); list.innerHTML += `<div class="bg-white p-5 rounded-xl border-r-4 border-orange-500 shadow-sm flex flex-col justify-between"><div><h3 class="text-lg font-bold text-gray-800 mb-1">📁 ${d.title}</h3><p class="text-sm text-gray-500 mb-4">${d.description}</p></div><a href="${d.link}" target="_blank" class="text-center px-4 py-2 bg-orange-100 text-orange-700 font-bold rounded-lg">تحميل الوثيقة</a></div>`; }); }
+async function loadAssignments() { const list = document.getElementById('assignmentsList'); const snapshot = await getDocs(query(collection(db, "assignments"), orderBy("timestamp", "desc"))); list.innerHTML = ''; snapshot.forEach(doc => { const ass = doc.data(); list.innerHTML += `<div class="bg-white p-6 rounded-xl border border-blue-200 shadow-md"><h3 class="text-xl font-bold text-blue-900">${ass.title}</h3><p class="text-gray-700 my-4 bg-blue-50 p-4 rounded-lg">${ass.description}</p><textarea id="ans_${doc.id}" class="w-full px-4 py-2 rounded-lg border mb-3" rows="3" placeholder="إجابتك..."></textarea><button onclick="window.submitAssignment('${doc.id}')" class="bg-blue-600 text-white px-6 py-2 rounded-lg font-bold">إرسال الإنجاز</button></div>`; }); }
+window.submitAssignment = async (id) => { const text = document.getElementById(`ans_${id}`).value; if(!text.trim()) return alert('اكتب الإجابة!'); await addDoc(collection(db, "submissions"), { assignmentId: id, answerText: text, timestamp: new Date() }); alert('تم الإرسال!'); document.getElementById(`ans_${id}`).value = ''; };
 
-// ================= 3. التكليفات العادية =================
-async function loadAssignments() {
-    const list = document.getElementById('assignmentsList');
-    try {
-        const snapshot = await getDocs(query(collection(db, "assignments"), orderBy("timestamp", "desc")));
-        list.innerHTML = '';
-        snapshot.forEach(doc => {
-            const ass = doc.data();
-            list.innerHTML += `
-                <div class="bg-white p-6 rounded-xl border border-blue-200 shadow-md">
-                    <div class="flex justify-between items-center mb-4"><h3 class="text-xl font-bold text-blue-900">${ass.title}</h3><span class="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-bold">على 20</span></div>
-                    <p class="text-gray-700 mb-4 bg-blue-50 p-4 rounded-lg">${ass.description}</p>
-                    <textarea id="ans_${doc.id}" class="w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-blue-500 mb-3" rows="3" placeholder="اكتب إجابتك هنا..."></textarea>
-                    <button onclick="window.submitAssignment('${doc.id}')" class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg font-bold shadow">إرسال الإنجاز</button>
-                </div>`;
-        });
-    } catch(e) { console.error(e); }
-}
-
-window.submitAssignment = async (id) => {
-    const text = document.getElementById(`ans_${id}`).value;
-    if(!text.trim()) { alert('الرجاء كتابة الإجابة أولاً!'); return; }
-    try {
-        await addDoc(collection(db, "submissions"), { assignmentId: id, answerText: text, timestamp: new Date() });
-        alert('تم إرسال إنجازك بنجاح!');
-        document.getElementById(`ans_${id}`).value = '';
-    } catch(e) { alert('خطأ في الإرسال'); }
-};
-
-// ================= 4. الاختبارات الرقمية (التفاعلية) =================
-let currentQuizData = null; // لتخزين بيانات الاختبار المفتوح حالياً
-let currentQuizId = null;
-
-// دالة لبعثرة خيارات المتعدد حتى لا يكون الأول دائما صحيحاً
-function shuffleArray(array) {
-    for (let i = array.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [array[i], array[j]] = [array[j], array[i]];
-    }
-    return array;
-}
+// الاختبارات الرقمية
+let currentQuizData = null; let currentQuizId = null;
+function shuffleArray(array) { for (let i = array.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [array[i], array[j]] = [array[j], array[i]]; } return array; }
 
 async function loadQuizzesList() {
     const list = document.getElementById('quizzesList');
-    try {
-        const snapshot = await getDocs(query(collection(db, "quizzes"), orderBy("timestamp", "desc")));
-        list.innerHTML = '';
-        snapshot.forEach(doc => {
-            const q = doc.data();
-            list.innerHTML += `
-                <div class="bg-white p-6 rounded-xl border-t-4 border-purple-600 shadow-md flex flex-col justify-between">
-                    <div>
-                        <h3 class="text-xl font-bold text-purple-900 mb-2">${q.title}</h3>
-                        <p class="text-gray-500 text-sm mb-4">يحتوي على ${q.totalQuestions} أسئلة | التنقيط: ${q.maxScore}/20</p>
-                    </div>
-                    <button onclick="window.startQuiz('${doc.id}')" class="w-full py-2 bg-purple-100 hover:bg-purple-200 text-purple-800 font-bold rounded-lg transition-colors">🚀 ابدأ الاختبار الآن</button>
-                </div>`;
-        });
-    } catch(e) { console.error(e); }
+    const snapshot = await getDocs(query(collection(db, "quizzes"), orderBy("timestamp", "desc")));
+    list.innerHTML = '';
+    snapshot.forEach(doc => {
+        const q = doc.data();
+        list.innerHTML += `<div class="bg-white p-6 rounded-xl border-t-4 border-purple-600 shadow-md flex flex-col justify-between"><div><h3 class="text-xl font-bold text-purple-900 mb-2">${q.title}</h3><p class="text-gray-500 text-sm mb-4">أسئلة: ${q.totalQuestions}</p></div><button onclick="window.startQuiz('${doc.id}')" class="w-full py-2 bg-purple-100 hover:bg-purple-200 text-purple-800 font-bold rounded-lg">🚀 ابدأ الاختبار</button></div>`;
+    });
 }
 
-// فتح نافذة الاختبار وبناء الأسئلة
 window.startQuiz = async (quizId) => {
-    try {
-        const docSnap = await getDoc(doc(db, "quizzes", quizId));
-        if (docSnap.exists()) {
-            currentQuizData = docSnap.data();
-            currentQuizId = quizId;
-            
-            document.getElementById('activeQuizTitle').innerText = currentQuizData.title;
-            document.getElementById('activeQuizInfo').innerText = `عدد الأسئلة: ${currentQuizData.totalQuestions} | النهاية المخصصة: ${currentQuizData.maxScore}/20`;
-            
-            const container = document.getElementById('quizQuestionsContainer');
-            container.innerHTML = '';
-
-            currentQuizData.questions.forEach((q, index) => {
-                let optionsHtml = '';
-                
-                if(q.type === 'tf') {
-                    // أسئلة صحيح وخطأ
-                    optionsHtml = `
-                        <label class="block p-3 border rounded-lg cursor-pointer hover:bg-purple-50 transition"><input type="radio" name="q_${index}" value="صحيح" class="mr-2 w-4 h-4 text-purple-600"> صحيح</label>
-                        <label class="block p-3 border rounded-lg cursor-pointer hover:bg-purple-50 transition"><input type="radio" name="q_${index}" value="خطأ" class="mr-2 w-4 h-4 text-purple-600"> خطأ</label>
-                    `;
-                } else {
-                    // أسئلة اختيار من متعدد (نقوم ببعثرة الخيارات أولا)
-                    let shuffledOptions = shuffleArray([...q.options]);
-                    shuffledOptions.forEach(opt => {
-                        optionsHtml += `<label class="block p-3 border rounded-lg cursor-pointer hover:bg-purple-50 transition mb-2"><input type="radio" name="q_${index}" value="${opt}" class="mr-2 w-4 h-4 text-purple-600"> ${opt}</label>`;
-                    });
-                }
-
-                container.innerHTML += `
-                    <div class="bg-white p-6 rounded-xl shadow-sm border border-gray-100">
-                        <h3 class="text-lg font-bold text-gray-800 mb-4"><span class="bg-purple-100 text-purple-800 px-2 py-1 rounded mr-2">${index + 1}</span> ${q.text}</h3>
-                        <div class="space-y-2 pr-4">
-                            ${optionsHtml}
-                        </div>
-                    </div>`;
-            });
-
-            document.getElementById('takeQuizModal').classList.remove('hidden');
-        }
-    } catch (e) { console.error(e); alert("خطأ في تحميل الاختبار"); }
-};
-
-window.closeQuizModal = () => {
-    document.getElementById('takeQuizModal').classList.add('hidden');
-    currentQuizData = null; currentQuizId = null;
-};
-
-// تصحيح الاختبار وحساب النقطة
-window.submitQuiz = async () => {
-    if(!currentQuizData) return;
-    
-    let score = 0;
-    let answeredCount = 0;
-
-    currentQuizData.questions.forEach((q, index) => {
-        const selected = document.querySelector(`input[name="q_${index}"]:checked`);
-        if(selected) {
-            answeredCount++;
-            if(selected.value === q.correctAnswer) score += q.points;
-        }
-    });
-
-    if(answeredCount < currentQuizData.totalQuestions) {
-        if(!confirm('لم تقم بالإجابة على جميع الأسئلة! هل أنت متأكد من رغبتك في التسليم؟')) return;
+    const docSnap = await getDoc(doc(db, "quizzes", quizId));
+    if (docSnap.exists()) {
+        currentQuizData = docSnap.data(); currentQuizId = quizId;
+        document.getElementById('activeQuizTitle').innerText = currentQuizData.title;
+        document.getElementById('activeQuizInfo').innerText = `عدد الأسئلة: ${currentQuizData.totalQuestions} | النهاية: ${currentQuizData.maxScore}/20`;
+        const container = document.getElementById('quizQuestionsContainer'); container.innerHTML = '';
+        currentQuizData.questions.forEach((q, index) => {
+            let optionsHtml = '';
+            if(q.type === 'tf') { optionsHtml = `<label class="block p-3 border rounded-lg cursor-pointer"><input type="radio" name="q_${index}" value="صحيح" class="mr-2"> صحيح</label><label class="block p-3 border rounded-lg cursor-pointer"><input type="radio" name="q_${index}" value="خطأ" class="mr-2"> خطأ</label>`; }
+            else { shuffleArray([...q.options]).forEach(opt => { optionsHtml += `<label class="block p-3 border rounded-lg cursor-pointer mb-2"><input type="radio" name="q_${index}" value="${opt}" class="mr-2"> ${opt}</label>`; }); }
+            container.innerHTML += `<div class="bg-white p-6 rounded-xl shadow-sm border mb-4"><h3 class="text-lg font-bold mb-4">${index + 1}. ${q.text}</h3>${optionsHtml}</div>`;
+        });
+        document.getElementById('takeQuizModal').classList.remove('hidden');
     }
+};
 
-    // إغلاق نافذة الاختبار وإظهار النتيجة
+window.closeQuizModal = () => { document.getElementById('takeQuizModal').classList.add('hidden'); currentQuizData = null; currentQuizId = null; };
+
+// 📊 تسليم الاختبار بربطه باسم الطالب
+window.submitQuiz = async () => {
+    if(!currentQuizData || !userId) return;
+    let score = 0; let answeredCount = 0;
+    currentQuizData.questions.forEach((q, index) => { const selected = document.querySelector(`input[name="q_${index}"]:checked`); if(selected) { answeredCount++; if(selected.value === q.correctAnswer) score += q.points; } });
+    if(answeredCount < currentQuizData.totalQuestions) { if(!confirm('لم تجب عن كل الأسئلة! متأكد من التسليم؟')) return; }
+
     window.closeQuizModal();
-    
-    const emoji = score >= (currentQuizData.maxScore / 2) ? '🎉' : '💪';
-    document.getElementById('resultEmoji').innerText = emoji;
+    document.getElementById('resultEmoji').innerText = score >= (currentQuizData.maxScore / 2) ? '🎉' : '💪';
     document.getElementById('studentScore').innerText = score;
     document.getElementById('totalScore').innerText = currentQuizData.maxScore;
     document.getElementById('resultModal').classList.remove('hidden');
 
-    // حفظ النتيجة في قاعدة البيانات
-    try {
-        await addDoc(collection(db, "quiz_results"), {
-            quizId: currentQuizId,
-            quizTitle: currentQuizData.title,
-            score: score,
-            maxScore: currentQuizData.maxScore,
-            timestamp: new Date()
-        });
-    } catch(e) { console.error("لم يتم حفظ النتيجة", e); }
+    // حفظ النتيجة مع اسم الطالب الفعلي ليراها الأستاذ
+    await addDoc(collection(db, "quiz_results"), {
+        quizId: currentQuizId,
+        quizTitle: currentQuizData.title,
+        studentId: userId,
+        studentName: userName || "طالب غير معروف", // هذا هو التعديل الذهبي!
+        score: score,
+        maxScore: currentQuizData.maxScore,
+        timestamp: new Date()
+    });
 };
 
-window.closeResultModal = () => {
-    document.getElementById('resultModal').classList.add('hidden');
-};
+window.closeResultModal = () => { document.getElementById('resultModal').classList.add('hidden'); };
 
-// التشغيل المبدئي
-loadAnnouncements();
-loadDocuments();
-loadAssignments();
-loadQuizzesList();
+loadAnnouncements(); loadDocuments(); loadAssignments(); loadQuizzesList();
