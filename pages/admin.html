@@ -20,7 +20,6 @@
         .section-content { display: none; animation: fadeIn 0.3s ease-in-out; }
         .section-active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        /* تخصيص شريط التمرير (Scrollbar) */
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 10px; }
     </style>
@@ -48,27 +47,52 @@
         <div id="section-users" class="section-content section-active">
             <div class="flex justify-between items-center mb-8">
                 <h1 class="text-3xl font-bold text-gray-800">المستخدمون</h1>
-                <button onclick="window.openModal('addUserModal')" class="bg-primary text-white px-4 py-2 rounded-lg">+ إضافة مستخدم</button>
+                <button onclick="window.openModal('addUserModal')" class="bg-primary hover:bg-blue-700 text-white px-4 py-2 rounded-lg shadow">+ إضافة مستخدم</button>
             </div>
-            <div class="bg-white rounded-xl shadow-sm border overflow-hidden"><table class="w-full text-right"><tbody id="usersTableBody"></tbody></table></div>
+            <div class="bg-white rounded-xl shadow-sm border overflow-hidden">
+                <table class="w-full text-right">
+                    <thead class="bg-gray-50 text-gray-500 text-sm">
+                        <tr>
+                            <th class="p-4">الاسم</th>
+                            <th class="p-4">الصفة</th>
+                            <th class="p-4">رقم الهاتف</th>
+                            <th class="p-4 text-center">كلمة المرور</th>
+                            <th class="p-4 text-center">تواصل سريع</th>
+                        </tr>
+                    </thead>
+                    <tbody id="usersTableBody"></tbody>
+                </table>
+            </div>
         </div>
 
         <div id="section-cohorts" class="section-content">
             <div class="flex justify-between items-center mb-8">
                 <h1 class="text-3xl font-bold text-gray-800">إدارة الأفواج</h1>
-                <button onclick="window.openModal('addCohortModal')" class="bg-primary text-white px-4 py-2 rounded-lg">+ إضافة فوج</button>
+                <button onclick="window.openModal('addCohortModal')" class="bg-primary hover:bg-blue-700 text-white px-4 py-2 rounded-lg shadow">+ إضافة فوج</button>
             </div>
-            <div class="bg-white rounded-xl shadow-sm border overflow-hidden"><table class="w-full text-right"><tbody id="cohortsTableBody"></tbody></table></div>
+            <div class="bg-white rounded-xl shadow-sm border overflow-hidden">
+                <table class="w-full text-right">
+                    <thead class="bg-gray-50 text-gray-500 text-sm"><tr><th class="p-4">اسم الفوج / القسم</th></tr></thead>
+                    <tbody id="cohortsTableBody"></tbody>
+                </table>
+            </div>
         </div>
 
         <div id="section-subjects" class="section-content">
             <div class="flex justify-between items-center mb-8">
                 <h1 class="text-3xl font-bold text-gray-800">المواد الدراسية</h1>
-                <button onclick="window.openModal('addSubjectModal')" class="bg-primary text-white px-4 py-2 rounded-lg">+ إضافة مادة وإسنادها</button>
+                <button onclick="window.openModal('addSubjectModal')" class="bg-primary hover:bg-blue-700 text-white px-4 py-2 rounded-lg shadow">+ إضافة مادة وإسنادها</button>
             </div>
             <div class="bg-white rounded-xl shadow-sm border overflow-hidden">
                 <table class="w-full text-right">
-                    <thead class="bg-gray-50 text-gray-500 text-sm"><tr><th class="p-4">المادة</th><th class="p-4">أستاذ المادة</th><th class="p-4">الفوج</th><th class="p-4">التفاصيل</th></tr></thead>
+                    <thead class="bg-gray-50 text-gray-500 text-sm">
+                        <tr>
+                            <th class="p-4">المادة</th>
+                            <th class="p-4">أستاذ المادة</th>
+                            <th class="p-4">الفوج</th>
+                            <th class="p-4">التفاصيل</th>
+                        </tr>
+                    </thead>
                     <tbody id="subjectsTableBody"></tbody>
                 </table>
             </div>
@@ -86,11 +110,40 @@
     </main>
 
     <div id="addUserModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
-        <div class="bg-white rounded-2xl w-full max-w-md p-6"><form id="addUserForm"><input type="text" id="newName" required class="w-full mb-4 px-4 py-2 border rounded-lg" placeholder="الاسم الكامل"><input type="tel" id="newPhone" required class="w-full mb-4 px-4 py-2 border rounded-lg" placeholder="رقم الهاتف"><select id="newRole" class="w-full mb-6 px-4 py-2 border rounded-lg"><option value="طالب">طالب</option><option value="أستاذ">أستاذ</option></select><div class="flex justify-end gap-3"><button type="button" onclick="window.closeModal('addUserModal')" class="px-5 py-2 bg-gray-200 rounded-lg">إلغاء</button><button type="submit" class="px-5 py-2 bg-secondary text-white rounded-lg">حفظ</button></div></form></div>
+        <div class="bg-white rounded-2xl w-full max-w-md p-6 shadow-2xl">
+            <h2 class="text-2xl font-bold text-primary mb-5">إضافة مستخدم</h2>
+            <form id="addUserForm">
+                <div class="mb-4">
+                    <input type="text" id="newName" required class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary" placeholder="الاسم الكامل">
+                </div>
+                <div class="mb-4">
+                    <input type="tel" id="newPhone" required class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary" placeholder="رقم الهاتف (مثال: 0600000000)" dir="ltr">
+                </div>
+                <div class="mb-4">
+                    <input type="text" id="newPassword" required class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary" placeholder="كلمة المرور الأولية (مثال: 123456)" dir="ltr">
+                </div>
+                <div class="mb-6">
+                    <select id="newRole" class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary">
+                        <option value="طالب">طالب</option>
+                        <option value="أستاذ">أستاذ</option>
+                    </select>
+                </div>
+                <div class="flex justify-end gap-3">
+                    <button type="button" onclick="window.closeModal('addUserModal')" class="px-5 py-2 bg-gray-200 font-bold rounded-lg hover:bg-gray-300">إلغاء</button>
+                    <button type="submit" class="px-5 py-2 bg-secondary text-white font-bold rounded-lg hover:bg-green-600">حفظ</button>
+                </div>
+            </form>
+        </div>
     </div>
     
     <div id="addCohortModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
-        <div class="bg-white rounded-2xl w-full max-w-md p-6"><form id="addCohortForm"><input type="text" id="newCohortName" required class="w-full mb-6 px-4 py-2 border rounded-lg" placeholder="اسم الفوج"><div class="flex justify-end gap-3"><button type="button" onclick="window.closeModal('addCohortModal')" class="px-5 py-2 bg-gray-200 rounded-lg">إلغاء</button><button type="submit" class="px-5 py-2 bg-secondary text-white rounded-lg">حفظ</button></div></form></div>
+        <div class="bg-white rounded-2xl w-full max-w-md p-6 shadow-2xl">
+            <h2 class="text-2xl font-bold text-primary mb-5">إضافة فوج جديد</h2>
+            <form id="addCohortForm">
+                <div class="mb-6"><input type="text" id="newCohortName" required class="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-primary" placeholder="اسم الفوج (مثال: طلبة الفصل الأول)"></div>
+                <div class="flex justify-end gap-3"><button type="button" onclick="window.closeModal('addCohortModal')" class="px-5 py-2 bg-gray-200 font-bold rounded-lg hover:bg-gray-300">إلغاء</button><button type="submit" class="px-5 py-2 bg-secondary text-white font-bold rounded-lg hover:bg-green-600">حفظ</button></div>
+            </form>
+        </div>
     </div>
 
     <div id="addSubjectModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50">
@@ -112,8 +165,8 @@
                 <div class="mb-6"><label class="block text-sm font-semibold mb-1">تخصيص لفوج:</label><select id="selectCohort" required class="w-full px-4 py-2 rounded-lg border"></select></div>
                 
                 <div class="flex justify-end gap-3">
-                    <button type="button" onclick="window.closeModal('addSubjectModal')" class="px-5 py-2 bg-gray-200 font-bold rounded-lg">إلغاء</button>
-                    <button type="submit" class="px-5 py-2 bg-secondary text-white font-bold rounded-lg">حفظ المادة</button>
+                    <button type="button" onclick="window.closeModal('addSubjectModal')" class="px-5 py-2 bg-gray-200 font-bold rounded-lg hover:bg-gray-300">إلغاء</button>
+                    <button type="submit" class="px-5 py-2 bg-secondary text-white font-bold rounded-lg hover:bg-green-600">حفظ المادة</button>
                 </div>
             </form>
         </div>
@@ -156,8 +209,8 @@
                 </div>
 
                 <div class="flex justify-end gap-3 mt-4">
-                    <button type="button" onclick="window.closeModal('addAnnouncementModal')" class="px-5 py-2 bg-gray-200 font-bold rounded-lg">إلغاء</button>
-                    <button type="submit" id="saveAnnBtn" class="px-5 py-2 bg-secondary text-white font-bold rounded-lg">نشر</button>
+                    <button type="button" onclick="window.closeModal('addAnnouncementModal')" class="px-5 py-2 bg-gray-200 font-bold rounded-lg hover:bg-gray-300">إلغاء</button>
+                    <button type="submit" id="saveAnnBtn" class="px-5 py-2 bg-secondary text-white font-bold rounded-lg hover:bg-green-600">نشر</button>
                 </div>
             </form>
         </div>

@@ -13,7 +13,7 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app);
 
-// إدارة الأقسام والنوافذ
+// ================= إدارة الأقسام والنوافذ =================
 window.showSection = (sectionId) => {
     document.querySelectorAll('.section-content').forEach(el => el.classList.remove('section-active'));
     document.getElementById(`section-${sectionId}`).classList.add('section-active');
@@ -29,10 +29,10 @@ window.closeModal = (modalId) => {
     }
 };
 
-// ================= المستخدمون والأفواج (القديمة المحدثة) =================
+// ================= 1. إدارة المستخدمين (مع كلمات المرور) =================
 async function loadUsers() {
     const tbody = document.getElementById('usersTableBody');
-    tbody.innerHTML = '<tr><td colspan="4" class="p-4 text-center">جاري التحميل...</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="5" class="p-4 text-center">جاري التحميل...</td></tr>';
     try {
         const snapshot = await getDocs(query(collection(db, "users"), orderBy("timestamp", "desc")));
         tbody.innerHTML = '';
@@ -41,28 +41,58 @@ async function loadUsers() {
             const badge = user.role === 'طالب' ? '<span class="px-2 py-1 bg-blue-100 text-blue-700 rounded-full text-xs">طالب</span>' : '<span class="px-2 py-1 bg-green-100 text-green-700 rounded-full text-xs">أستاذ</span>';
             let phoneForWa = user.phone ? user.phone : "";
             if(phoneForWa.startsWith('0')) phoneForWa = "212" + phoneForWa.substring(1);
-            tbody.innerHTML += `<tr class="border-b hover:bg-gray-50"><td class="p-4 font-semibold">${user.name}</td><td class="p-4">${badge}</td><td class="p-4" dir="ltr">${user.phone}</td><td class="p-4 text-center"><a href="https://wa.me/${phoneForWa}" target="_blank" class="px-3 py-1 bg-green-500 text-white rounded text-sm">💬 مراسلة</a></td></tr>`;
+            
+            // إضافة صف كلمة المرور باللون الأحمر ليكون واضحاً للمدير
+            tbody.innerHTML += `
+                <tr class="border-b hover:bg-gray-50">
+                    <td class="p-4 font-semibold">${user.name}</td>
+                    <td class="p-4">${badge}</td>
+                    <td class="p-4 font-bold" dir="ltr">${user.phone}</td>
+                    <td class="p-4 text-center text-red-600 font-bold bg-red-50" dir="ltr">${user.password || '---'}</td>
+                    <td class="p-4 text-center"><a href="https://wa.me/${phoneForWa}" target="_blank" class="px-3 py-1 bg-green-500 text-white rounded text-sm shadow">💬 مراسلة</a></td>
+                </tr>`;
         });
         updateSelectDropdowns(); 
-    } catch(e) {}
+    } catch(e) { console.error(e); }
 }
+
 document.getElementById('addUserForm').addEventListener('submit', async (e) => {
-    e.preventDefault(); await addDoc(collection(db, "users"), { name: document.getElementById('newName').value, phone: document.getElementById('newPhone').value, role: document.getElementById('newRole').value, timestamp: new Date() }); window.closeModal('addUserModal'); loadUsers();
+    e.preventDefault(); 
+    await addDoc(collection(db, "users"), { 
+        name: document.getElementById('newName').value, 
+        phone: document.getElementById('newPhone').value, 
+        password: document.getElementById('newPassword').value, // حفظ كلمة المرور
+        role: document.getElementById('newRole').value, 
+        timestamp: new Date() 
+    }); 
+    window.closeModal('addUserModal'); 
+    loadUsers();
 });
 
+// ================= 2. إدارة الأفواج =================
 async function loadCohorts() {
     const tbody = document.getElementById('cohortsTableBody');
     try {
         const snapshot = await getDocs(query(collection(db, "cohorts"), orderBy("timestamp", "desc")));
-        tbody.innerHTML = ''; snapshot.forEach(doc => { tbody.innerHTML += `<tr class="border-b hover:bg-gray-50"><td class="p-4 font-semibold text-primary">🏫 ${doc.data().name}</td></tr>`; });
+        tbody.innerHTML = ''; 
+        snapshot.forEach(doc => { 
+            tbody.innerHTML += `<tr class="border-b hover:bg-gray-50"><td class="p-4 font-semibold text-primary">🏫 ${doc.data().name}</td></tr>`; 
+        });
         updateSelectDropdowns(); 
-    } catch(e) {}
+    } catch(e) { console.error(e); }
 }
+
 document.getElementById('addCohortForm').addEventListener('submit', async (e) => {
-    e.preventDefault(); await addDoc(collection(db, "cohorts"), { name: document.getElementById('newCohortName').value, timestamp: new Date() }); window.closeModal('addCohortModal'); loadCohorts();
+    e.preventDefault(); 
+    await addDoc(collection(db, "cohorts"), { 
+        name: document.getElementById('newCohortName').value, 
+        timestamp: new Date() 
+    }); 
+    window.closeModal('addCohortModal'); 
+    loadCohorts();
 });
 
-// ================= المواد الدراسية (محدثة بالمعلومات والمقرر) =================
+// ================= 3. المواد الدراسية =================
 async function loadSubjects() {
     const tbody = document.getElementById('subjectsTableBody');
     try {
@@ -87,8 +117,8 @@ document.getElementById('addSubjectForm').addEventListener('submit', async (e) =
     const cSelect = document.getElementById('selectCohort');
     await addDoc(collection(db, "subjects"), {
         name: document.getElementById('newSubjectName').value,
-        info: document.getElementById('subjectInfo').value, // حفظ معلومات المادة
-        syllabus: document.getElementById('subjectSyllabus').value, // حفظ المقرر
+        info: document.getElementById('subjectInfo').value, 
+        syllabus: document.getElementById('subjectSyllabus').value, 
         teacherName: tSelect.options[tSelect.selectedIndex].text,
         cohortName: cSelect.options[cSelect.selectedIndex].text,
         timestamp: new Date()
@@ -98,30 +128,31 @@ document.getElementById('addSubjectForm').addEventListener('submit', async (e) =
 });
 
 async function updateSelectDropdowns() {
-    const tSelect = document.getElementById('selectTeacher'); const cSelect = document.getElementById('selectCohort');
+    const tSelect = document.getElementById('selectTeacher'); 
+    const cSelect = document.getElementById('selectCohort');
+    
     const tSnapshot = await getDocs(query(collection(db, "users"), where("role", "==", "أستاذ")));
-    tSelect.innerHTML = ''; tSnapshot.forEach(doc => { tSelect.innerHTML += `<option value="${doc.id}">${doc.data().name}</option>`; });
+    tSelect.innerHTML = ''; 
+    tSnapshot.forEach(doc => { tSelect.innerHTML += `<option value="${doc.id}">${doc.data().name}</option>`; });
+    
     const cSnapshot = await getDocs(collection(db, "cohorts"));
-    cSelect.innerHTML = ''; cSnapshot.forEach(doc => { cSelect.innerHTML += `<option value="${doc.id}">${doc.data().name}</option>`; });
+    cSelect.innerHTML = ''; 
+    cSnapshot.forEach(doc => { cSelect.innerHTML += `<option value="${doc.id}">${doc.data().name}</option>`; });
 }
 
-// ================= الإخبارات والمواعيد (الجديدة) =================
+// ================= 4. الإخبارات والمواعيد =================
 window.toggleDateInput = () => {
     const type = document.getElementById('annType').value;
     const dateDiv = document.getElementById('dateContainer');
     if(type === 'موعد') dateDiv.classList.remove('hidden'); else dateDiv.classList.add('hidden');
 };
 
-// جلب الأسماء لخانة التخصيص
 window.toggleTargetList = async () => {
     const target = document.getElementById('annTarget').value;
     const container = document.getElementById('targetListContainer');
     const checkboxList = document.getElementById('targetCheckboxes');
     
-    if (target === 'all') {
-        container.classList.add('hidden');
-        return;
-    }
+    if (target === 'all') { container.classList.add('hidden'); return; }
     
     container.classList.remove('hidden');
     checkboxList.innerHTML = '<p class="text-sm text-gray-500">جاري تحميل الأسماء من القاعدة...</p>';
@@ -143,12 +174,10 @@ window.toggleTargetList = async () => {
     checkboxList.innerHTML = html;
 };
 
-// تحديد الكل
 window.toggleAll = (source) => {
     document.querySelectorAll('.target-cb').forEach(cb => cb.checked = source.checked);
 };
 
-// حفظ الإخبار / الموعد
 document.getElementById('addAnnouncementForm').addEventListener('submit', async (e) => {
     e.preventDefault();
     const btn = document.getElementById('saveAnnBtn');
@@ -157,7 +186,6 @@ document.getElementById('addAnnouncementForm').addEventListener('submit', async 
     const type = document.getElementById('annType').value;
     const target = document.getElementById('annTarget').value;
     
-    // جمع المعرفات المحددة إذا كان مخصصاً
     let selectedIds = [];
     let targetSummary = "الجميع";
     if(target !== 'all') {
@@ -171,7 +199,7 @@ document.getElementById('addAnnouncementForm').addEventListener('submit', async 
         await addDoc(collection(db, "announcements"), {
             type: type,
             targetMode: target,
-            specificUsers: selectedIds, // مصفوفة فيها معرفات المحددين فقط
+            specificUsers: selectedIds, 
             targetSummary: targetSummary,
             date: type === 'موعد' ? document.getElementById('annDate').value : null,
             content: document.getElementById('annContent').value,
@@ -183,7 +211,6 @@ document.getElementById('addAnnouncementForm').addEventListener('submit', async 
     finally { btn.innerText = "نشر"; btn.disabled = false; }
 });
 
-// عرض الإخبارات في صفحة المدير
 async function loadAnnouncements() {
     const list = document.getElementById('announcementsList');
     list.innerHTML = '<p>جاري التحميل...</p>';

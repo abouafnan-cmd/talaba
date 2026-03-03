@@ -3,16 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>بوابة المعهد العلمي</title>
-    
-    <link rel="icon" type="image/png" href="icons/192.png">
-    <link rel="apple-touch-icon" href="icons/192.png">
-    
-    <link rel="manifest" href="manifest.json">
-    <script src="app.js" defer></script>
-
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
-    
+    <title>تسجيل الدخول | المعهد العلمي</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -24,44 +16,37 @@
             }
         }
     </script>
-    <style>
-        body { background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%); }
-        .tab-active { border-bottom: 3px solid #1e3a8a; color: #1e3a8a; font-weight: 700; }
-        .tab-inactive { color: #6b7280; }
-    </style>
 </head>
-<body class="min-h-screen flex items-center justify-center p-4">
+<body class="bg-gray-100 h-screen flex items-center justify-center relative overflow-hidden">
 
-    <div class="bg-white w-full max-w-md rounded-2xl shadow-2xl overflow-hidden">
-        <div class="bg-primary p-6 text-center">
-            <img src="icons/192.png" alt="شعار المعهد" class="w-16 h-16 rounded-full mx-auto mb-3 shadow-lg bg-white p-1 object-cover">
-            <h1 class="text-2xl font-bold text-white">المعهد العلمي</h1>
-            <p class="text-blue-200 text-sm mt-1">نظام إدارة التعليم والدراسة الأسبوعية</p>
+    <div class="absolute top-[-10%] left-[-10%] w-96 h-96 bg-blue-200 rounded-full mix-blend-multiply filter blur-3xl opacity-50"></div>
+    <div class="absolute bottom-[-10%] right-[-10%] w-96 h-96 bg-green-200 rounded-full mix-blend-multiply filter blur-3xl opacity-50"></div>
+
+    <div class="bg-white p-8 md:p-10 rounded-2xl shadow-2xl w-full max-w-md text-center border-t-4 border-primary relative z-10">
+        <div class="w-20 h-20 bg-blue-50 text-primary rounded-full flex items-center justify-center mx-auto mb-5 shadow-inner">
+            <span class="text-4xl">🏛️</span>
         </div>
+        <h1 class="text-3xl font-bold text-gray-800 mb-2">المعهد العلمي</h1>
+        <p class="text-gray-500 mb-8 font-semibold">بوابة الدخول الموحدة</p>
 
-        <div class="flex border-b border-gray-200">
-            <button onclick="window.switchTab('student')" id="tab-student" class="flex-1 py-3 text-center text-sm tab-active transition-all duration-300">طالب</button>
-            <button onclick="window.switchTab('teacher')" id="tab-teacher" class="flex-1 py-3 text-center text-sm tab-inactive transition-all duration-300">أستاذ</button>
-            <button onclick="window.switchTab('admin')" id="tab-admin" class="flex-1 py-3 text-center text-sm tab-inactive transition-all duration-300">الإدارة</button>
-        </div>
-
-        <div class="p-8">
-            <form id="loginForm" onsubmit="window.handleLogin(event)">
-                <div class="mb-5">
-                    <label id="userLabel" class="block text-gray-700 text-sm font-semibold mb-2">البريد الإلكتروني (للطالب)</label>
-                    <input type="email" id="email" required class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all" placeholder="example@talaba.com" dir="ltr">
-                </div>
-
-                <div id="passwordField" class="mb-6">
-                    <label class="block text-gray-700 text-sm font-semibold mb-2">الرقم السري</label>
-                    <input type="password" id="password" required class="w-full px-4 py-3 rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all" placeholder="••••••••" dir="ltr">
-                </div>
-
-                <button type="submit" id="submitBtn" class="w-full bg-secondary hover:bg-green-600 text-white font-bold py-3 px-4 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
-                    تسجيل الدخول
-                </button>
-            </form>
-        </div>
+        <form id="loginForm" class="text-right">
+            <div class="mb-5">
+                <label class="block text-gray-700 text-sm font-bold mb-2">رقم الهاتف (للواتساب):</label>
+                <input type="tel" id="userPhone" required class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all" placeholder="مثال: 0600000000" dir="ltr">
+            </div>
+            <div class="mb-6">
+                <label class="block text-gray-700 text-sm font-bold mb-2">كلمة المرور:</label>
+                <input type="password" id="userPassword" required class="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent transition-all" placeholder="••••••••" dir="ltr">
+            </div>
+            
+            <button type="submit" id="loginBtn" class="w-full bg-primary text-white font-bold py-3 px-4 rounded-xl hover:bg-blue-900 transition-colors shadow-lg mt-2">
+                تسجيل الدخول
+            </button>
+            
+            <p id="errorMsg" class="text-red-500 text-sm mt-4 hidden text-center font-bold bg-red-50 py-2 rounded-lg border border-red-100">
+                ⚠️ رقم الهاتف أو كلمة المرور غير صحيحة!
+            </p>
+        </form>
     </div>
 
     <script type="module" src="js/auth.js"></script>
