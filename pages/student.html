@@ -4,54 +4,55 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>بوابة الطالب | المعهد العلمي</title>
+    <link rel="manifest" href="../manifest.json">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         .section-content { display: none; animation: fadeIn 0.3s ease-in-out; }
         .section-active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 10px; }
+        ::-webkit-scrollbar { width: 6px; } ::-webkit-scrollbar-thumb { background-color: #cbd5e1; border-radius: 10px; }
     </style>
 </head>
-<body class="bg-gray-50 flex flex-col md:flex-row h-screen overflow-hidden text-gray-800 relative">
+<body class="bg-gray-50 flex h-screen overflow-hidden text-gray-800">
     
-    <div class="md:hidden bg-white text-blue-900 p-4 flex justify-between items-center shadow-md z-20 border-b border-gray-200">
-        <h2 class="text-xl font-bold" id="mobileStudentName">بوابة الطالب</h2>
-        <button onclick="document.getElementById('sidebar').classList.toggle('hidden')" class="text-3xl focus:outline-none">☰</button>
-    </div>
-
-    <aside id="sidebar" class="w-64 bg-white border-l border-gray-200 flex flex-col hidden md:flex absolute md:relative h-full z-50 shadow-xl md:shadow-sm transition-all">
+    <aside id="sidebar" class="w-64 bg-white border-l border-gray-200 flex flex-col absolute md:relative hidden md:flex h-full z-50 shadow-xl transition-all">
         <div class="p-6 text-center border-b border-gray-100 relative">
             <button onclick="document.getElementById('sidebar').classList.add('hidden')" class="md:hidden absolute top-4 right-4 text-2xl text-red-500 font-bold">×</button>
             <div class="text-4xl mb-2">🎓</div>
-            <h2 class="text-xl font-bold text-blue-900" id="studentNameDisplay">بوابة الطالب</h2>
-            <button onclick="window.openModal('changePassModal')" class="mt-2 text-xs bg-gray-200 hover:bg-gray-300 text-gray-700 px-3 py-1 rounded-full transition-colors">🔑 تغيير المرور</button>
+            <h2 class="text-xl font-bold text-blue-900">بوابة الطالب</h2>
+            <button onclick="window.openModal('changePassModal')" class="mt-2 text-xs bg-gray-200 hover:bg-gray-300 px-3 py-1 rounded-full">🔑 تغيير المرور</button>
         </div>
         <nav class="flex-1 p-4 space-y-2 overflow-y-auto">
             <button onclick="window.showSection('announcements')" class="w-full text-right px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg font-bold text-yellow-600">📢 الإخبارات</button>
             <button onclick="window.showSection('documents')" class="w-full text-right px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg font-bold text-orange-600">📁 الجذاذات</button>
             <button onclick="window.showSection('assignments')" class="w-full text-right px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg font-bold text-blue-700">📝 التكليفات</button>
-            <button onclick="window.showSection('quizzes')" class="w-full text-right px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg font-bold text-purple-700">⏱️ الاختبارات الرقمية</button>
+            <button onclick="window.showSection('quizzes')" class="w-full text-right px-4 py-3 text-gray-600 hover:bg-gray-50 rounded-lg font-bold text-purple-700">⏱️ الاختبارات</button>
         </nav>
-        <div class="p-4 border-t border-gray-100">
-            <button onclick="window.logout()" class="block w-full text-center px-4 py-2 text-red-600 bg-red-50 hover:bg-red-100 rounded-lg font-semibold">تسجيل الخروج</button>
-        </div>
     </aside>
 
-    <main class="flex-1 p-4 md:p-10 overflow-y-auto relative">
-        <div id="section-announcements" class="section-content section-active"><h1 class="text-2xl md:text-3xl font-bold text-gray-800 mb-6">لوحة الإعلانات</h1><div id="announcementsList" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div></div>
-        <div id="section-documents" class="section-content"><h1 class="text-2xl md:text-3xl font-bold text-gray-800 mb-6">الوثائق والجذاذات</h1><div id="documentsList" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div></div>
-        <div id="section-assignments" class="section-content"><h1 class="text-2xl md:text-3xl font-bold text-gray-800 mb-6">التكليفات والواجبات</h1><div id="assignmentsList" class="grid grid-cols-1 gap-6"></div></div>
-        <div id="section-quizzes" class="section-content"><h1 class="text-2xl md:text-3xl font-bold text-gray-800 mb-6">الاختبارات الرقمية</h1><div id="quizzesList" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div></div>
-    </main>
+    <div class="flex-1 flex flex-col h-full overflow-hidden">
+        <header class="bg-white shadow-sm border-b px-4 md:px-8 py-4 flex justify-between items-center z-40">
+            <div class="flex items-center gap-4">
+                <button onclick="document.getElementById('sidebar').classList.toggle('hidden')" class="md:hidden text-2xl text-blue-900">☰</button>
+                <h2 class="text-lg md:text-xl font-bold text-blue-900" id="topNavWelcome">مرحبا بالطالب</h2>
+            </div>
+            <button onclick="window.logout()" class="bg-red-50 hover:bg-red-100 text-red-600 font-bold px-3 md:px-4 py-2 rounded-lg transition border border-red-200 text-sm md:text-base">🚪 تسجيل الخروج</button>
+        </header>
 
-    <div id="changePassModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50 px-4"><div class="bg-white rounded-2xl w-full max-w-sm p-6"><h2 class="text-2xl font-bold text-gray-800 mb-5">تغيير المرور</h2><form id="changePassForm"><input type="password" id="newPass" required class="w-full px-4 py-2 rounded-lg border focus:ring-2 focus:ring-blue-500 mb-6" placeholder="كلمة المرور الجديدة" dir="ltr"><div class="flex justify-end gap-3"><button type="button" onclick="window.closeModal('changePassModal')" class="px-5 py-2 bg-gray-200 font-bold rounded-lg">إلغاء</button><button type="submit" class="px-5 py-2 bg-blue-600 text-white font-bold rounded-lg">حفظ</button></div></form></div></div>
-    
-    <div id="takeQuizModal" class="fixed inset-0 bg-white z-50 hidden flex flex-col overflow-hidden"><div class="bg-purple-700 text-white p-4 md:p-6 shadow-md flex justify-between items-center"><div><h2 id="activeQuizTitle" class="text-xl md:text-2xl font-bold">عنوان الاختبار</h2><p id="activeQuizInfo" class="text-purple-200 mt-1 text-sm">عدد الأسئلة: 0 | النهاية: 0</p></div><button onclick="window.closeQuizModal()" class="bg-red-500 px-3 py-2 rounded-lg font-bold text-sm">إلغاء</button></div><div class="flex-1 overflow-y-auto p-4 md:p-10 bg-gray-50"><div id="quizQuestionsContainer" class="max-w-3xl mx-auto space-y-6"></div><div class="max-w-3xl mx-auto mt-8 text-left"><button onclick="window.submitQuiz()" id="submitQuizBtn" class="bg-green-500 text-white px-8 py-3 rounded-xl font-bold shadow-lg w-full md:w-auto">تسليم الإجابات</button></div></div></div>
+        <main class="flex-1 p-4 md:p-10 overflow-y-auto relative">
+            <div id="section-announcements" class="section-content section-active"><h1 class="text-2xl font-bold mb-6">لوحة الإعلانات</h1><div id="announcementsList" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div></div>
+            <div id="section-documents" class="section-content"><h1 class="text-2xl font-bold mb-6">الوثائق</h1><div id="documentsList" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div></div>
+            <div id="section-assignments" class="section-content"><h1 class="text-2xl font-bold mb-6">التكليفات</h1><div id="assignmentsList" class="grid grid-cols-1 gap-6"></div></div>
+            <div id="section-quizzes" class="section-content"><h1 class="text-2xl font-bold mb-6">الاختبارات</h1><div id="quizzesList" class="grid grid-cols-1 md:grid-cols-2 gap-6"></div></div>
+        </main>
+    </div>
 
+    <div id="changePassModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50 px-4"><div class="bg-white rounded-2xl w-full max-w-sm p-6"><form id="changePassForm"><input type="password" id="newPass" required class="w-full px-4 py-2 rounded-lg border mb-6" placeholder="المرور الجديدة"><div class="flex justify-end gap-3"><button type="button" onclick="window.closeModal('changePassModal')" class="px-5 py-2 bg-gray-200 rounded-lg">إلغاء</button><button type="submit" class="px-5 py-2 bg-blue-600 text-white rounded-lg">حفظ</button></div></form></div></div>
+    <div id="takeQuizModal" class="fixed inset-0 bg-white z-50 hidden flex flex-col"><div class="bg-purple-700 text-white p-4 shadow-md flex justify-between items-center"><div><h2 id="activeQuizTitle" class="text-xl font-bold">اختبار</h2><p id="activeQuizInfo" class="text-purple-200 text-sm">النهاية: 0</p></div><button onclick="window.closeQuizModal()" class="bg-red-500 px-3 py-2 rounded-lg font-bold text-sm">إلغاء</button></div><div class="flex-1 overflow-y-auto p-4 bg-gray-50"><div id="quizQuestionsContainer" class="max-w-3xl mx-auto space-y-6"></div><div class="max-w-3xl mx-auto mt-8 text-left"><button onclick="window.submitQuiz()" id="submitQuizBtn" class="bg-green-500 text-white px-8 py-3 rounded-xl font-bold shadow-lg w-full md:w-auto">تسليم الإجابات</button></div></div></div>
     <div id="resultModal" class="fixed inset-0 bg-black bg-opacity-70 hidden flex items-center justify-center z-50 px-4"><div class="bg-white rounded-2xl w-full max-w-sm p-8 text-center"><div class="text-6xl mb-4" id="resultEmoji">🎉</div><h2 class="text-3xl font-bold mb-2">النتيجة</h2><div class="text-5xl font-bold text-purple-700 mb-8" dir="ltr"><span id="studentScore">0</span> / <span id="totalScore">20</span></div><button onclick="window.closeResultModal()" class="w-full px-5 py-3 bg-gray-200 font-bold rounded-lg">إغلاق</button></div></div>
 
     <script type="module" src="../js/student.js"></script>
+    <script>if('serviceWorker' in navigator) { navigator.serviceWorker.register('../sw.js'); }</script>
 </body>
 </html>

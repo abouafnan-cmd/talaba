@@ -1,3 +1,8 @@
+const userName = localStorage.getItem('userName'); 
+if(userName) { 
+    const topNav = document.getElementById('topNavWelcome');
+    if(topNav) topNav.innerText = `مرحبا بالأستاذ الكريم: ${userName}`; 
+}
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
 import { getFirestore, collection, addDoc, getDocs, query, where, doc, updateDoc, orderBy } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-firestore.js";
 
