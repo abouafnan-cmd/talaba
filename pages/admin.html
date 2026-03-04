@@ -6,6 +6,7 @@
     <title>لوحة الإدارة | المعهد العلمي</title>
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <style>
         .section-content { display: none; animation: fadeIn 0.3s ease-in-out; }
         .section-active { display: block; }
@@ -30,49 +31,58 @@
             <button onclick="window.showSection('users')" class="w-full text-right px-4 py-3 rounded-lg hover:bg-blue-800">👥 المستخدمون</button>
             <button onclick="window.showSection('cohorts')" class="w-full text-right px-4 py-3 rounded-lg hover:bg-blue-800">🏫 إدارة الأفواج</button>
             <button onclick="window.showSection('subjects')" class="w-full text-right px-4 py-3 rounded-lg hover:bg-blue-800">📚 المواد الدراسية</button>
-            <button onclick="window.showSection('announcements')" class="w-full text-right px-4 py-3 rounded-lg hover:bg-blue-800 text-yellow-300">📢 الإخبارات والمواعيد</button>
-            <button onclick="window.showSection('attendance')" class="w-full text-right px-4 py-3 rounded-lg hover:bg-blue-800 text-green-300">✅ تتبع الغياب</button>
+            <button onclick="window.showSection('announcements')" class="w-full text-right px-4 py-3 rounded-lg hover:bg-blue-800 text-yellow-300">📢 الإخبارات</button>
+            <button onclick="window.showSection('attendance')" class="w-full text-right px-4 py-3 rounded-lg hover:bg-blue-800 text-green-300">✅ الحضور والغياب</button>
             <button onclick="window.showSection('journals')" class="w-full text-right px-4 py-3 rounded-lg hover:bg-blue-800 text-orange-300">📔 دفتر النصوص</button>
+            <button onclick="window.showSection('assignments')" class="w-full text-right px-4 py-3 rounded-lg hover:bg-blue-800 text-blue-300">📝 التكليفات (إدارة)</button>
+            <button onclick="window.showSection('quizzes')" class="w-full text-right px-4 py-3 rounded-lg hover:bg-blue-800 text-purple-300">⏱️ الاختبارات والنتائج</button>
         </nav>
         <div class="p-4 border-t border-blue-800"><button onclick="window.logout()" class="block w-full text-center px-4 py-2 bg-red-500 hover:bg-red-600 rounded-lg text-white font-bold">تسجيل الخروج</button></div>
     </aside>
 
     <main class="flex-1 flex flex-col h-full overflow-y-auto p-4 md:p-10">
-        <div id="section-users" class="section-content section-active">
-            <div class="flex justify-between items-center mb-6"><h1 class="text-2xl md:text-3xl font-bold">المستخدمون</h1><button onclick="window.openModal('addUserModal')" class="bg-blue-600 text-white px-4 py-2 rounded-lg">+ إضافة</button></div>
-            <div class="bg-white rounded-xl shadow-sm border overflow-x-auto"><table class="w-full text-right whitespace-nowrap"><thead class="bg-gray-50 text-gray-500 text-sm"><tr><th class="p-4">الاسم</th><th class="p-4">الصفة</th><th class="p-4">الهاتف</th><th class="p-4">المرور</th><th class="p-4 text-center">إجراءات</th></tr></thead><tbody id="usersTableBody"></tbody></table></div>
-        </div>
-
-        <div id="section-cohorts" class="section-content">
-            <div class="flex justify-between items-center mb-6"><h1 class="text-2xl md:text-3xl font-bold">إدارة الأفواج</h1><button onclick="window.openModal('addCohortModal')" class="bg-blue-600 text-white px-4 py-2 rounded-lg">+ إضافة</button></div>
-            <div class="bg-white rounded-xl shadow-sm border overflow-hidden"><table class="w-full text-right"><thead class="bg-gray-50 text-gray-500 text-sm"><tr><th class="p-4">اسم الفوج / القسم</th><th class="p-4 text-center">إجراءات</th></tr></thead><tbody id="cohortsTableBody"></tbody></table></div>
-        </div>
-
-        <div id="section-subjects" class="section-content">
-            <div class="flex justify-between items-center mb-6"><h1 class="text-2xl md:text-3xl font-bold">المواد الدراسية</h1><button onclick="window.openModal('addSubjectModal')" class="bg-blue-600 text-white px-4 py-2 rounded-lg">+ إضافة مادة</button></div>
-            <div class="bg-white rounded-xl shadow-sm border overflow-x-auto"><table class="w-full text-right whitespace-nowrap"><thead class="bg-gray-50 text-gray-500 text-sm"><tr><th class="p-4">المادة</th><th class="p-4">الأستاذ</th><th class="p-4">الفوج</th><th class="p-4 text-center">إجراءات</th></tr></thead><tbody id="subjectsTableBody"></tbody></table></div>
-        </div>
-
-        <div id="section-announcements" class="section-content">
-            <div class="flex justify-between items-center mb-6"><h1 class="text-2xl md:text-3xl font-bold">الإخبارات والمواعيد</h1><button onclick="window.openModal('addAnnouncementModal')" class="bg-yellow-500 text-white font-bold px-4 py-2 rounded-lg">+ إنشاء جديد</button></div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="announcementsList"></div>
-        </div>
+        <div id="section-users" class="section-content section-active"><div class="flex justify-between items-center mb-6"><h1 class="text-2xl font-bold">المستخدمون</h1><button onclick="window.openModal('addUserModal')" class="bg-blue-600 text-white px-4 py-2 rounded-lg">+ إضافة</button></div><div class="bg-white rounded-xl shadow-sm border overflow-x-auto"><table class="w-full text-right whitespace-nowrap"><thead class="bg-gray-50 text-gray-500 text-sm"><tr><th class="p-4">الاسم</th><th class="p-4">الصفة</th><th class="p-4 text-center">إجراءات</th></tr></thead><tbody id="usersTableBody"></tbody></table></div></div>
+        <div id="section-cohorts" class="section-content"><div class="flex justify-between items-center mb-6"><h1 class="text-2xl font-bold">إدارة الأفواج</h1><button onclick="window.openModal('addCohortModal')" class="bg-blue-600 text-white px-4 py-2 rounded-lg">+ إضافة</button></div><div class="bg-white rounded-xl shadow-sm border overflow-hidden"><table class="w-full text-right"><thead class="bg-gray-50 text-gray-500 text-sm"><tr><th class="p-4">اسم الفوج / القسم</th><th class="p-4 text-center">إجراءات</th></tr></thead><tbody id="cohortsTableBody"></tbody></table></div></div>
+        <div id="section-subjects" class="section-content"><div class="flex justify-between items-center mb-6"><h1 class="text-2xl font-bold">المواد الدراسية</h1><button onclick="window.openModal('addSubjectModal')" class="bg-blue-600 text-white px-4 py-2 rounded-lg">+ إضافة مادة</button></div><div class="bg-white rounded-xl shadow-sm border overflow-x-auto"><table class="w-full text-right whitespace-nowrap"><thead class="bg-gray-50 text-gray-500 text-sm"><tr><th class="p-4">المادة</th><th class="p-4">الأستاذ</th><th class="p-4 text-center">إجراءات</th></tr></thead><tbody id="subjectsTableBody"></tbody></table></div></div>
+        <div id="section-announcements" class="section-content"><div class="flex justify-between items-center mb-6"><h1 class="text-2xl font-bold">الإخبارات والمواعيد</h1><button onclick="window.openModal('addAnnouncementModal')" class="bg-yellow-500 text-white font-bold px-4 py-2 rounded-lg">+ إنشاء جديد</button></div><div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="announcementsList"></div></div>
+        <div id="section-journals" class="section-content"><h1 class="text-2xl font-bold text-orange-700 mb-6">الاطلاع على دفتر النصوص</h1><div class="grid grid-cols-1 gap-6" id="adminJournalsList"></div></div>
 
         <div id="section-attendance" class="section-content">
-            <div class="flex justify-between items-center mb-6"><h1 class="text-2xl md:text-3xl font-bold text-green-700">تتبع الحضور والغياب</h1></div>
-            <div class="bg-white rounded-xl shadow-sm border overflow-x-auto"><table class="w-full text-right whitespace-nowrap"><thead class="bg-gray-50 text-gray-500 text-sm"><tr><th class="p-4">التاريخ</th><th class="p-4">الأستاذ</th><th class="p-4">المادة</th><th class="p-4">تفاصيل الغياب</th></tr></thead><tbody id="adminAttendanceBody"></tbody></table></div>
+            <div class="flex justify-between items-center mb-6">
+                <h1 class="text-2xl font-bold text-green-700">تتبع الحضور والغياب</h1>
+                <button onclick="window.downloadPDF()" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg font-bold shadow">📄 تحميل تقرير PDF</button>
+            </div>
+            <div class="bg-white rounded-xl shadow-sm border overflow-x-auto p-4" id="pdfContainer">
+                <h2 class="text-center font-bold text-xl mb-4 hidden" id="pdfTitle">تقرير الغياب الأسبوعي - المعهد العلمي</h2>
+                <table class="w-full text-right whitespace-nowrap"><thead class="bg-gray-50 text-gray-500 text-sm"><tr><th class="p-4 border-b">التاريخ</th><th class="p-4 border-b">الأستاذ</th><th class="p-4 border-b">المادة</th><th class="p-4 border-b">تفاصيل الغياب</th></tr></thead><tbody id="adminAttendanceBody"></tbody></table>
+            </div>
         </div>
 
-        <div id="section-journals" class="section-content">
-            <div class="flex justify-between items-center mb-6"><h1 class="text-2xl md:text-3xl font-bold text-orange-700">دفتر النصوص</h1></div>
-            <div class="grid grid-cols-1 gap-6" id="adminJournalsList"></div>
+        <div id="section-assignments" class="section-content">
+            <h1 class="text-2xl font-bold text-blue-700 mb-6">إدارة التكليفات (حذف)</h1>
+            <div class="bg-white rounded-xl shadow-sm border overflow-x-auto"><table class="w-full text-right whitespace-nowrap"><thead class="bg-gray-50 text-sm"><tr><th class="p-4">المادة</th><th class="p-4">عنوان التكليف</th><th class="p-4 text-center">إجراء</th></tr></thead><tbody id="adminAssignmentsBody"></tbody></table></div>
+        </div>
+
+        <div id="section-quizzes" class="section-content">
+            <h1 class="text-2xl font-bold text-purple-700 mb-6">إدارة الاختبارات والنتائج</h1>
+            <div class="bg-white rounded-xl shadow-sm border overflow-x-auto"><table class="w-full text-right whitespace-nowrap"><thead class="bg-gray-50 text-sm"><tr><th class="p-4">المادة</th><th class="p-4">الاختبار</th><th class="p-4 text-center">إجراءات المدير</th></tr></thead><tbody id="adminQuizzesBody"></tbody></table></div>
         </div>
     </main>
 
     <div id="addUserModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50 px-4"><div class="bg-white rounded-2xl w-full max-w-md p-6"><h2 class="text-2xl font-bold mb-5" id="userModalTitle">مستخدم جديد</h2><form id="addUserForm"><input type="hidden" id="editUserId"><div class="mb-4"><input type="text" id="newName" required class="w-full px-4 py-2 border rounded-lg" placeholder="الاسم"></div><div class="mb-4"><input type="tel" id="newPhone" required class="w-full px-4 py-2 border rounded-lg" placeholder="الهاتف" dir="ltr"></div><div class="mb-4"><input type="text" id="newPassword" required class="w-full px-4 py-2 border rounded-lg" placeholder="كلمة المرور" dir="ltr"></div><div class="mb-6"><select id="newRole" class="w-full px-4 py-2 border rounded-lg"><option value="طالب">طالب</option><option value="أستاذ">أستاذ</option></select></div><div class="flex justify-end gap-3"><button type="button" onclick="window.closeModal('addUserModal')" class="px-4 py-2 bg-gray-200 rounded-lg">إلغاء</button><button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg">حفظ</button></div></form></div></div>
     <div id="addCohortModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50 px-4"><div class="bg-white rounded-2xl w-full max-w-md p-6"><h2 class="text-2xl font-bold mb-5" id="cohortModalTitle">إضافة فوج</h2><form id="addCohortForm"><input type="hidden" id="editCohortId"><div class="mb-6"><input type="text" id="newCohortName" required class="w-full px-4 py-2 border rounded-lg" placeholder="اسم الفوج"></div><div class="flex justify-end gap-3"><button type="button" onclick="window.closeModal('addCohortModal')" class="px-4 py-2 bg-gray-200 rounded-lg">إلغاء</button><button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg">حفظ</button></div></form></div></div>
-    <div id="addSubjectModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50 px-4"><div class="bg-white rounded-2xl w-full max-w-md p-6 max-h-[90vh] overflow-y-auto"><h2 class="text-2xl font-bold mb-5" id="subjectModalTitle">مادة دراسية</h2><form id="addSubjectForm"><input type="hidden" id="editSubjectId"><div class="mb-4"><input type="text" id="newSubjectName" required class="w-full px-4 py-2 border rounded-lg" placeholder="المادة"></div><div class="mb-4"><textarea id="subjectInfo" class="w-full px-4 py-2 border rounded-lg" placeholder="معلومات..."></textarea></div><div class="mb-4"><textarea id="subjectSyllabus" class="w-full px-4 py-2 border rounded-lg" placeholder="المقرر..."></textarea></div><div class="mb-4"><select id="selectTeacher" required class="w-full px-4 py-2 border rounded-lg"></select></div><div class="mb-6"><select id="selectCohort" required class="w-full px-4 py-2 border rounded-lg"></select></div><div class="flex justify-end gap-3"><button type="button" onclick="window.closeModal('addSubjectModal')" class="px-4 py-2 bg-gray-200 rounded-lg">إلغاء</button><button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg">حفظ</button></div></form></div></div>
-    <div id="addAnnouncementModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50 px-4"><div class="bg-white rounded-2xl w-full max-w-md p-6 max-h-[90vh] flex flex-col"><h2 class="text-2xl font-bold mb-4" id="annModalTitle">إخبار أو موعد</h2><form id="addAnnouncementForm" class="overflow-y-auto pr-2"><input type="hidden" id="editAnnId"><div class="mb-4"><select id="annType" class="w-full px-4 py-2 border rounded-lg" onchange="window.toggleDateInput()"><option value="إخبار">إخبار</option><option value="موعد">موعد</option></select></div><div id="dateContainer" class="mb-4 hidden"><input type="datetime-local" id="annDate" class="w-full px-4 py-2 border rounded-lg"></div><div class="mb-4"><select id="annTarget" class="w-full px-4 py-2 border rounded-lg" onchange="window.toggleTargetList()"><option value="all">الجميع</option><option value="teachers">أساتذة</option><option value="students">طلبة</option></select></div><div id="targetListContainer" class="mb-4 hidden bg-gray-50 p-2 border"><div id="targetCheckboxes" class="max-h-24 overflow-y-auto"></div></div><div class="mb-6"><textarea id="annContent" required class="w-full px-4 py-2 border rounded-lg" rows="3" placeholder="المحتوى..."></textarea></div><div class="flex justify-end gap-3 mt-4"><button type="button" onclick="window.closeModal('addAnnouncementModal')" class="px-4 py-2 bg-gray-200 rounded-lg">إلغاء</button><button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg">حفظ</button></div></form></div></div>
+    <div id="addSubjectModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50 px-4"><div class="bg-white rounded-2xl w-full max-w-md p-6 max-h-[90vh] overflow-y-auto"><h2 class="text-2xl font-bold mb-5" id="subjectModalTitle">مادة دراسية</h2><form id="addSubjectForm"><input type="hidden" id="editSubjectId"><div class="mb-4"><input type="text" id="newSubjectName" required class="w-full px-4 py-2 border rounded-lg" placeholder="المادة"></div><div class="mb-4"><select id="selectTeacher" required class="w-full px-4 py-2 border rounded-lg"></select></div><div class="mb-6"><select id="selectCohort" required class="w-full px-4 py-2 border rounded-lg"></select></div><div class="flex justify-end gap-3"><button type="button" onclick="window.closeModal('addSubjectModal')" class="px-4 py-2 bg-gray-200 rounded-lg">إلغاء</button><button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg">حفظ</button></div></form></div></div>
+    <div id="addAnnouncementModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50 px-4"><div class="bg-white rounded-2xl w-full max-w-md p-6 max-h-[90vh] flex flex-col"><h2 class="text-2xl font-bold mb-4" id="annModalTitle">إخبار أو موعد</h2><form id="addAnnouncementForm" class="overflow-y-auto pr-2"><input type="hidden" id="editAnnId"><div class="mb-4"><select id="annType" class="w-full px-4 py-2 border rounded-lg" onchange="window.toggleDateInput()"><option value="إخبار">إخبار</option><option value="موعد">موعد</option></select></div><div id="dateContainer" class="mb-4 hidden"><input type="datetime-local" id="annDate" class="w-full px-4 py-2 border rounded-lg"></div><div class="mb-4"><select id="annTarget" class="w-full px-4 py-2 border rounded-lg"><option value="all">الجميع</option></select></div><div class="mb-6"><textarea id="annContent" required class="w-full px-4 py-2 border rounded-lg" rows="3" placeholder="المحتوى..."></textarea></div><div class="flex justify-end gap-3 mt-4"><button type="button" onclick="window.closeModal('addAnnouncementModal')" class="px-4 py-2 bg-gray-200 rounded-lg">إلغاء</button><button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg">حفظ</button></div></form></div></div>
+
+    <div id="absentModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50 px-4">
+        <div class="bg-white rounded-2xl w-full max-w-sm p-6">
+            <h2 class="text-2xl font-bold mb-4 text-red-600 border-b pb-2">قائمة المتغيبين</h2>
+            <ul id="absentList" class="list-disc list-inside space-y-2 mb-6 font-semibold text-gray-700 max-h-48 overflow-y-auto"></ul>
+            <button onclick="window.closeModal('absentModal')" class="w-full bg-gray-200 hover:bg-gray-300 py-2 rounded-lg font-bold">إغلاق</button>
+        </div>
+    </div>
+    
+    <div id="quizResultsModal" class="fixed inset-0 bg-black bg-opacity-50 hidden flex items-center justify-center z-50 px-4"><div class="bg-white rounded-2xl w-full max-w-2xl p-6 max-h-[90vh] flex flex-col"><h2 class="text-2xl font-bold text-purple-700 mb-5" id="resultsModalTitle">النتائج</h2><div class="overflow-y-auto flex-1"><table class="w-full text-right border whitespace-nowrap"><thead class="bg-purple-50"><tr><th class="p-3">اسم الطالب</th><th class="p-3">النقطة</th><th class="p-3">التاريخ</th></tr></thead><tbody id="quizResultsBody"></tbody></table></div><div class="mt-4"><button onclick="window.closeModal('quizResultsModal')" class="px-5 py-2 bg-gray-200 rounded-lg">إغلاق</button></div></div></div>
 
     <script type="module" src="../js/admin.js"></script>
 </body>
