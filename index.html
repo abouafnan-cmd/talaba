@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>تسجيل الدخول | المعهد العلمي</title>
+    <title>تسجيل الدخول | معهد ابن كثير</title>
     <link rel="manifest" href="manifest.json">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
@@ -18,14 +18,8 @@
         }
     </script>
     <style>
-        /* هذا الكود يمنع التزحزح (Scroll) نهائياً في كل الشاشات */
-        body, html {
-            margin: 0;
-            padding: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-        }
+        /* منع التزحزح (Scroll) نهائياً */
+        body, html { margin: 0; padding: 0; width: 100%; height: 100%; overflow: hidden; }
     </style>
 </head>
 <body class="flex items-center justify-center bg-gradient-to-br from-blue-900 via-indigo-800 to-purple-900 relative">
@@ -35,13 +29,13 @@
         <div class="absolute bottom-[-10%] right-[-10%] w-96 h-96 bg-purple-500 rounded-full mix-blend-overlay filter blur-3xl opacity-30 animate-pulse"></div>
     </div>
 
-    <div class="bg-white/95 backdrop-blur-md p-8 md:p-10 rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.3)] w-full max-w-md text-center border border-white/20 relative z-10 mx-4">
+    <div class="bg-white/95 backdrop-blur-md p-6 md:p-10 rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.3)] w-full max-w-md text-center border border-white/20 relative z-10 mx-4">
         
-        <div class="w-24 h-24 bg-gradient-to-tr from-blue-600 to-indigo-500 text-white rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg transform -rotate-3 hover:rotate-0 transition-transform duration-300">
-            <span class="text-5xl">🏛️</span>
+        <div class="w-28 h-28 mx-auto mb-4 transform hover:scale-105 transition-transform duration-300">
+            <img src="icon-512.png" alt="شعار المعهد" class="w-full h-full object-contain drop-shadow-md">
         </div>
         
-        <h1 class="text-3xl font-extrabold text-gray-800 mb-2 tracking-tight">المعهد العلمي</h1>
+        <h1 class="text-2xl md:text-3xl font-extrabold text-gray-800 mb-2 tracking-tight leading-snug">معهد ابن كثير لعلوم القرآن والسنة - مراكش</h1>
         <p class="text-gray-500 mb-8 font-semibold text-sm">بوابة الدخول الموحدة للطلبة والأساتذة</p>
 
         <form id="loginForm" class="text-right">
